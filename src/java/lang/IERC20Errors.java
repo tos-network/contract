@@ -8,8 +8,8 @@ public interface IERC20Errors {
     /**
      * Thrown when the sender's balance is insufficient for a transfer.
      */
-    class ERC20InsufficientBalanceException extends RuntimeException {
-        public ERC20InsufficientBalanceException(Address sender, UInt256 balance, UInt256 needed) {
+    class ERC20InsufficientBalance extends RuntimeException {
+        public ERC20InsufficientBalance(Address sender, UInt256 balance, UInt256 needed) {
             super(String.format("ERC20: insufficient balance. Sender: %s, Balance: %s, Needed: %s", sender, balance, needed));
         }
     }
@@ -17,8 +17,8 @@ public interface IERC20Errors {
     /**
      * Thrown when the sender address is invalid (e.g., zero address).
      */
-    class ERC20InvalidSenderException extends RuntimeException {
-        public ERC20InvalidSenderException(Address sender) {
+    class ERC20InvalidSender extends RuntimeException {
+        public ERC20InvalidSender(Address sender) {
             super(String.format("ERC20: invalid sender. Sender: %s", sender));
         }
     }
@@ -26,8 +26,8 @@ public interface IERC20Errors {
     /**
      * Thrown when the receiver address is invalid (e.g., zero address).
      */
-    class ERC20InvalidReceiverException extends RuntimeException {
-        public ERC20InvalidReceiverException(Address receiver) {
+    class ERC20InvalidReceiver extends RuntimeException {
+        public ERC20InvalidReceiver(Address receiver) {
             super(String.format("ERC20: invalid receiver. Receiver: %s", receiver));
         }
     }
@@ -35,8 +35,8 @@ public interface IERC20Errors {
     /**
      * Thrown when the spender's allowance is insufficient for a transfer.
      */
-    class ERC20InsufficientAllowanceException extends RuntimeException {
-        public ERC20InsufficientAllowanceException(Address spender, UInt256 allowance, UInt256 needed) {
+    class ERC20InsufficientAllowance extends RuntimeException {
+        public ERC20InsufficientAllowance(Address spender, UInt256 allowance, UInt256 needed) {
             super(String.format("ERC20: insufficient allowance. Spender: %s, Allowance: %s, Needed: %s", spender, allowance, needed));
         }
     }
@@ -44,8 +44,8 @@ public interface IERC20Errors {
     /**
      * Thrown when the approver address is invalid (e.g., zero address).
      */
-    class ERC20InvalidApproverException extends RuntimeException {
-        public ERC20InvalidApproverException(Address approver) {
+    class ERC20InvalidApprover extends RuntimeException {
+        public ERC20InvalidApprover(Address approver) {
             super(String.format("ERC20: invalid approver. Approver: %s", approver));
         }
     }
@@ -53,8 +53,8 @@ public interface IERC20Errors {
     /**
      * Thrown when the spender address is invalid (e.g., zero address).
      */
-    class ERC20InvalidSpenderException extends RuntimeException {
-        public ERC20InvalidSpenderException(Address spender) {
+    class ERC20InvalidSpender extends RuntimeException {
+        public ERC20InvalidSpender(Address spender) {
             super(String.format("ERC20: invalid spender. Spender: %s", spender));
         }
     }

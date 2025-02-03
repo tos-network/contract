@@ -13,6 +13,7 @@ public class Address implements Type<String> {
     public static final String TYPE_NAME = "address";
     public static final int DEFAULT_LENGTH = 160;
     public static final Address DEFAULT = new Address(BigInteger.ZERO);
+    public static final Address ZERO_ADDRESS = new Address(BigInteger.ZERO);
 
     private final UInt160 value;
 
@@ -40,6 +41,13 @@ public class Address implements Type<String> {
         return value;
     }
 
+     /**
+   * {@code this == 0}
+   */
+    public final boolean isZeroAddress() {
+        return value.isZero();
+    }
+
     @Override
     public String getTypeAsString() {
         return TYPE_NAME;
@@ -59,6 +67,11 @@ public class Address implements Type<String> {
     public boolean equals(Object o) {
         if (this == o) {
             return true;
+        }
+        if (o == null ) {
+            if (value == null || value.isZero()) {
+                return true;
+            }
         }
         if (o == null || getClass() != o.getClass()) {
             return false;

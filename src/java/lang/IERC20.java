@@ -10,13 +10,21 @@ public interface IERC20 {
      *
      * Note that `value` may be zero.
      */
-    void emitTransfer(Address from, Address to, UInt256 value);
+    class Transfer extends EventLog {
+        public Transfer(Address from, Address to, UInt256 value) {
+            super(String.format("Transfer event:  %s ->  %s :  %s", from, to, value));
+        }
+    }
 
     /**
      * @dev Emitted when the allowance of a `spender` for an `owner` is set by
      * a call to {approve}. `value` is the new allowance.
      */
-    void emitApproval(Address owner, Address spender, UInt256 value);
+    class Approval extends EventLog {
+        public Approval(Address owner, Address spender, UInt256 value) {
+            super(String.format("Approval event:  %s approved  %s :  %s", owner, spender, value));
+        }
+    }
 
     /**
      * @dev Returns the value of tokens in existence.

@@ -1,113 +1,63 @@
 package java.lang;
 
-// SPDX-License-Identifier: MIT
-/**
- * Java implementation of an ERC20 token contract using UInt256 and Mapping.
- */
+
 public abstract class ERC20 extends Context implements IERC20Errors, IERC20Metadata {
+    private final Mapping<Address, UInt256> balances = new Mapping<>(() -> UInt256.ZERO);
+    private final Mapping<Address, Mapping<Address, UInt256>> allowances = new Mapping<>(() -> new Mapping<>(() -> UInt256.ZERO));
+    private UInt256 totalSupply = UInt256.ZERO;
     private final String name;
     private final String symbol;
-    private final int decimals = 18; // Default value for ERC20 tokens
-    private UInt256 totalSupply = UInt256.ZERO;
 
-    // Balances of accounts
-    private final Mapping<Address, UInt256> balances = new Mapping<>();
-
-    // Allowances: owner -> (spender -> amount)
-    private final Mapping<Address, Mapping<Address, UInt256>> allowances = new Mapping<>();
-
-    /**
-     * Constructor to initialize the token with a name and symbol.
-     *
-     * @param name_   The name of the token.
-     * @param symbol_ The symbol of the token.
-     */
-    public ERC20(String name_, String symbol_) {
-        this.name = name_;
-        this.symbol = symbol_;
+    public ERC20(String name, String symbol) {
+        this.name = name;
+        this.symbol = symbol;
     }
 
-    /**
-     * Returns the name of the token.
-     */
+    @Override
     public String name() {
         return name;
     }
 
-    /**
-     * Returns the symbol of the token.
-     */
+    @Override
     public String symbol() {
         return symbol;
     }
 
-    /**
-     * Returns the number of decimals used for token display.
-     */
+    @Override
     public UInt8 decimals() {
-        return new UInt8(decimals);
+        return new UInt8(18);
     }
 
-    /**
-     * Returns the total supply of the token.
-     */
+    @Override
     public UInt256 totalSupply() {
         return totalSupply;
     }
 
-    /**
-     * Returns the balance of the specified account.
-     *
-     * @param account The address of the account.
-     */
+    @Override
     public UInt256 balanceOf(Address account) {
-        return balances.getOrDefault(account, UInt256.ZERO);
+        return balances.get(account);
     }
 
-    /**
-     * Transfers tokens from the caller to the specified recipient.
-     *
-     * @param to    The address of the recipient.
-     * @param value The amount of tokens to transfer.
-     * @return True if the transfer was successful.
-     */
+    @Override
     public boolean transfer(Address to, UInt256 value) {
         Address owner = _msgSender();
         _transfer(owner, to, value);
         return true;
     }
 
-    /**
-     * Returns the remaining number of tokens that `spender` is allowed to spend on behalf of `owner`.
-     *
-     * @param owner  The address of the owner.
-     * @param spender The address of the spender.
-     */
+    @Override
     public UInt256 allowance(Address owner, Address spender) {
-        return allowances.getOrDefault(owner, new Mapping<>()).getOrDefault(spender, UInt256.ZERO);
+        return allowances.get(owner).get(spender);
     }
 
-    /**
-     * Approves the specified spender to spend the specified amount of tokens on behalf of the caller.
-     *
-     * @param spender The address of the spender.
-     * @param value   The amount of tokens to approve.
-     * @return True if the approval was successful.
-     */
+    @Override
     public boolean approve(Address spender, UInt256 value) {
         Address owner = _msgSender();
         _approve(owner, spender, value);
         return true;
     }
 
-    /**
-     * Transfers tokens from one account to another, using an allowance.
-     *
-     * @param from  The address of the sender.
-     * @param to    The address of the recipient.
-     * @param value The amount of tokens to transfer.
-     * @return True if the transfer was successful.
-     */
+    @Override
     public boolean transferFrom(Address from, Address to, UInt256 value) {
         Address spender = _msgSender();
         _spendAllowance(from, spender, value);
@@ -115,138 +65,121 @@ public abstract class ERC20 extends Context implements IERC20Errors, IERC20Metad
         return true;
     }
 
-    /**
-     * Internal function to transfer tokens from one account to another.
-     *
-     * @param from  The address of the sender.
-     * @param to    The address of the recipient.
-     * @param value The amount of tokens to transfer.
-     */
-    protected void _transfer(Address from, Address to, UInt256 value) {
-        if (from == null) {
-            throw new ERC20InvalidSenderException(from);
+    private void _transfer(Address from, Address to, UInt256 value) {
+        if (Address.ZERO_ADDRESS.equals(from)) {
+            revert(new ERC20InvalidSender(Address.ZERO_ADDRESS));
         }
-        if (to == null) {
-            throw new ERC20InvalidReceiverException(to);
+        if (Address.ZERO_ADDRESS.equals(to)) {
+            revert(new ERC20InvalidReceiver(Address.ZERO_ADDRESS));
         }
-
-        UInt256 fromBalance = balanceOf(from);
-        if (fromBalance.compareTo(value) < 0) {
-            throw new ERC20InsufficientBalanceException(from, fromBalance, value);
+        if (from.equals(to)) {
+            return; // No need to transfer to self
         }
-
-        balances.put(from, fromBalance.subtract(value));
-        balances.put(to, balanceOf(to).add(value));
-
-        // Emit Transfer event
-        emitTransfer(from, to, value);
+        if (value.isZero()) {
+            return; // No need to process zero-value transfers
+        }
+        _update(from, to, value);
     }
 
     /**
-     * Internal function to mint new tokens.
+     * @dev Transfers a `value` amount of tokens from `from` to `to`, or alternatively mints (or burns) if `from`
+     * (or `to`) is the zero address. All customizations to transfers, mints, and burns should be done by overriding
+     * this function.
      *
-     * @param account The address to receive the minted tokens.
-     * @param value   The amount of tokens to mint.
+     * Emits a {Transfer} event.
      */
-    protected void _mint(Address account, UInt256 value) {
-        if (account == null) {
-            throw new ERC20InvalidReceiverException(account);
-        }
-
-        totalSupply = totalSupply.add(value);
-        balances.put(account, balanceOf(account).add(value));
-
-        // Emit Transfer event
-        emitTransfer(null, account, value);
-    }
-
-    /**
-     * Internal function to burn tokens.
-     *
-     * @param account The address to burn tokens from.
-     * @param value   The amount of tokens to burn.
-     */
-    protected void _burn(Address account, UInt256 value) {
-        if (account == null) {
-            throw new ERC20InvalidSenderException(account);
-        }
-
-        UInt256 accountBalance = balanceOf(account);
-        if (accountBalance.compareTo(value) < 0) {
-            throw new ERC20InsufficientBalanceException(account, accountBalance, value);
-        }
-
-        balances.put(account, accountBalance.subtract(value));
-        totalSupply = totalSupply.subtract(value);
-
-        // Emit Transfer event
-        emitTransfer(account, null, value);
-    }
-
-    /**
-     * Internal function to approve an allowance.
-     *
-     * @param owner   The address of the owner.
-     * @param spender The address of the spender.
-     * @param value   The amount of tokens to approve.
-     */
-    protected void _approve(Address owner, Address spender, UInt256 value) {
-        if (owner == null) {
-            throw new ERC20InvalidApproverException(owner);
-        }
-        if (spender == null) {
-            throw new ERC20InvalidSpenderException(spender);
-        }
-
-        Mapping<Address, UInt256> ownerAllowances = allowances.getOrDefault(owner, new Mapping<>());
-        ownerAllowances.put(spender, value);
-        allowances.put(owner, ownerAllowances);
-
-        // Emit Approval event
-        emitApproval(owner, spender, value);
-    }
-
-    /**
-     * Internal function to spend an allowance.
-     *
-     * @param owner   The address of the owner.
-     * @param spender The address of the spender.
-     * @param value   The amount of tokens to spend.
-     */
-    protected void _spendAllowance(Address owner, Address spender, UInt256 value) {
-        Mapping<Address, UInt256> ownerAllowances = allowances.getOrDefault(owner, new Mapping<>());
-        UInt256 currentAllowance = ownerAllowances.getOrDefault(spender, UInt256.ZERO);
-
-        if (currentAllowance.compareTo(UInt256.MAX_VALUE) < 0) {
-            if (currentAllowance.compareTo(value) < 0) {
-                throw new ERC20InsufficientAllowanceException(spender, currentAllowance, value);
+    private void _update(Address from, Address to, UInt256 value) { 
+        if (Address.ZERO_ADDRESS.equals(from)) {
+            // Minting tokens: from is the zero address
+            totalSupply = totalSupply.add(value);
+        } else {
+            // Transferring or burning tokens: from is a valid address
+            UInt256 fromBalance = balanceOf(from);
+            if (fromBalance.compareTo(value) < 0) {
+                revert(new ERC20InsufficientBalance(from, fromBalance, value));
             }
-            ownerAllowances.put(spender, currentAllowance.subtract(value));
-            allowances.put(owner, ownerAllowances);
+            // Subtract the value from the sender's balance
+            balances.set(from, fromBalance.subtract(value));
+        }
+    
+        if (Address.ZERO_ADDRESS.equals(to)) {
+            // Burning tokens: to is the zero address
+            totalSupply = totalSupply.subtract(value);
+        } else {
+            // Transferring or minting tokens: to is a valid address
+            UInt256 toBalance = balanceOf(to);
+            // Add the value to the recipient's balance
+            balances.set(to, toBalance.add(value));
+        }
+    
+        // Emit Transfer event
+        emit(new Transfer(from, to, value));
+    }
+
+
+    protected void _mint(Address account, UInt256 value) {
+        if (Address.ZERO_ADDRESS.equals(account)) {
+            revert(new ERC20InvalidReceiver(Address.ZERO_ADDRESS));
+        }
+        if (value.isZero()) {
+            return; // No need to mint zero tokens
+        }
+        _update(Address.ZERO_ADDRESS, account, value);
+
+    }
+
+    protected void _burn(Address account, UInt256 value) {
+        if (Address.ZERO_ADDRESS.equals(account)) {
+            revert(new ERC20InvalidSender(Address.ZERO_ADDRESS));
+        }
+        if (value.isZero()) {
+            return; // No need to burn zero tokens
+        }
+        _update(account, Address.ZERO_ADDRESS, value);
+    }
+
+    private void _approve(Address owner, Address spender, UInt256 value) {
+        _approve(owner, spender, value, true);
+    }
+
+    protected void _approve(Address owner, Address spender, UInt256 value, boolean emitEvent) {
+        // Check for invalid owner address
+        if (Address.ZERO_ADDRESS.equals(owner)) {
+            revert(new ERC20InvalidApprover(owner));
+        }
+    
+        // Check for invalid spender address
+        if (Address.ZERO_ADDRESS.equals(spender)) {
+            revert(new ERC20InvalidSpender(spender));
+        }
+    
+        // Update the allowance
+        Mapping<Address, UInt256> ownerAllowances = allowances.get(owner);
+        ownerAllowances.set(spender, value);
+        allowances.set(owner, ownerAllowances);
+    
+        // Emit Approval event if required
+        if (emitEvent) {
+            emit(new Approval(owner, spender, value));
         }
     }
 
     /**
-     * Emits a Transfer event.
+     * @dev Updates `owner` s allowance for `spender` based on spent `value`.
      *
-     * @param from  The address of the sender.
-     * @param to    The address of the recipient.
-     * @param value The amount of tokens transferred.
-     */
-    public void emitTransfer(Address from, Address to, UInt256 value) {
-        // In Java, this could be implemented using a logging framework or custom event system.
-        System.out.println("Transfer: from=" + from + ", to=" + to + ", value=" + value);
-    }
-
-    /**
-     * Emits an Approval event.
+     * Does not update the allowance value in case of infinite allowance.
+     * Revert if not enough allowance is available.
      *
-     * @param owner   The address of the owner.
-     * @param spender The address of the spender.
-     * @param value   The amount of tokens approved.
+     * Does not emit an {Approval} event.
      */
-    public void emitApproval(Address owner, Address spender, UInt256 value) {
-        // In Java, this could be implemented using a logging framework or custom event system.
-        System.out.println("Approval: owner=" + owner + ", spender=" + spender + ", value=" + value);
+    private void _spendAllowance(Address owner, Address spender, UInt256 value) {
+        UInt256 currentAllowance = allowance(owner, spender);
+        if (currentAllowance.compareTo(UInt256.MAX_VALUE) < 0) {
+          if (currentAllowance.compareTo(value) < 0) {
+            revert(new ERC20InsufficientAllowance(spender, currentAllowance, value));
+          }
+        
+          _approve(owner, spender, currentAllowance.subtract(value));
+        }
     }
 }

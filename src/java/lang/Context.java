@@ -22,4 +22,12 @@ public abstract class Context {
     protected UInt256 _contextSuffixLength() {
         return UInt256.ZERO;
     }
+
+    public static void revert(RuntimeException re) {
+        throw new RevertException(re.getMessage()); 
+    }
+
+    public static void emit(EventLog el) {
+        System.out.println(el.getMessage());
+    }
 }

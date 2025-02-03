@@ -4,8 +4,8 @@ package java.lang;
  * Represents a message with a sender and data.
  */
 public class Message {
-    public Address sender;  // Sender of the message
-    public byte[] data;     // Data contained in the message
+    protected Address sender;  // Sender of the message
+    protected byte[] data;     // Data contained in the message
 
     /**
      * Constructs a new Message with the specified sender and data.
