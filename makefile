@@ -41,7 +41,7 @@ $(classpath-dep): $(classpath-sources)
 	@touch $(@)
 
 # Create JAR file
-$(build)/crt.jar: $(classpath-dep)
+$(build)/contract.jar: $(classpath-dep)
 	@echo "creating $(@)"
 	@mkdir -p $(dir $(@))
 	(cd $(classpath-build) && \

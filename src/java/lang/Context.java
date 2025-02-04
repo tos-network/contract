@@ -9,7 +9,7 @@ package java.lang;
  * This contract is only required for intermediate, library-like contracts.
  */
 public abstract class Context {
-    protected Message msg;
+    protected final Message msg = new Message();
 
     protected Address _msgSender() {
         return msg.sender;
