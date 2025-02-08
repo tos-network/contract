@@ -5,6 +5,8 @@ import java.lang.RuntimeException;
 import java.lang.String;
 import java.lang.UInt256;
 
+// SPDX-License-Identifier: MIT
+
 /**
  * Standard ERC20 Errors.
  * This interface defines custom exceptions for ERC20 token operations.

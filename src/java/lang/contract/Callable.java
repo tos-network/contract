@@ -1,5 +1,7 @@
 package java.lang.contract;
 
+// SPDX-License-Identifier: MIT
+
 /**
  * A task that returns a result and may throw an exception.
  * Implementors define a single method with no arguments.

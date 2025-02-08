@@ -28,7 +28,7 @@ classpath-dep = $(classpath-build).dep
 
 # Default target
 .PHONY: build
-build: $(classpath-dep) $(build)/contract.jar
+build: $(classpath-dep) $(build)/tl.jar
 
 # Compile Java sources
 $(classpath-dep): $(classpath-sources)
@@ -41,11 +41,11 @@ $(classpath-dep): $(classpath-sources)
 	@touch $(@)
 
 # Create JAR file
-$(build)/contract.jar: $(classpath-dep)
+$(build)/tl.jar: $(classpath-dep)
 	@echo "creating $(@)"
 	@mkdir -p $(dir $(@))
 	(cd $(classpath-build) && \
-	 $(jar) c0f "../contract.jar" .)
+	 $(jar) c0f "../tl.jar" .)
 
 # Clean target
 .PHONY: clean

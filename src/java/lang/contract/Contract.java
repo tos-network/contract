@@ -1,6 +1,8 @@
 package java.lang.contract;
 import java.lang.reflect.Field;
 
+// SPDX-License-Identifier: MIT
+
 public abstract class Contract extends Context implements Callable<byte[]>
 {
     // constructor

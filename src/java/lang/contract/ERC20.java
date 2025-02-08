@@ -10,6 +10,8 @@ import java.lang.annotation.View;
 import static java.lang.Bool.TRUE;
 import java.lang.annotation.Payable;
 
+// SPDX-License-Identifier: MIT
+
 /**
  * @dev Implementation of the {IERC20} interface.
  *
