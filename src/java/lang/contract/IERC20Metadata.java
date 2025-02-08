@@ -1,4 +1,7 @@
-package java.lang;
+package java.lang.contract;
+
+import java.lang.String;
+import java.lang.UInt8;
 
 // SPDX-License-Identifier: MIT
 

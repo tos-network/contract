@@ -1,33 +1,23 @@
 package java.lang;
 
 import java.util.HashMap;
-import java.util.function.Supplier;
 
 /**
- * A generic mapping implementation with default value support.
+ * A generic mapping implementation.
+ * TODO: add default value support.
  *
  * @param <K> Type of the key
  * @param <V> Type of the value
  */
 public class Mapping<K, V> {
     private final HashMap<K, V> map = new HashMap<>();
-    private final Supplier<V> defaultValueSupplier;
 
     /**
      * Default constructor (no default value supplier).
      */
     public Mapping() {
-        this.defaultValueSupplier = null;
     }
 
-    /**
-     * Constructor with a default value supplier.
-     *
-     * @param defaultValueSupplier A supplier that provides default values for missing keys.
-     */
-    public Mapping(Supplier<V> defaultValueSupplier) {
-        this.defaultValueSupplier = defaultValueSupplier;
-    }
 
     /**
      * Retrieves the value associated with the given key.
@@ -40,7 +30,7 @@ public class Mapping<K, V> {
         if (map.containsKey(key)) {
             return map.get(key);
         }
-        return defaultValueSupplier != null ? defaultValueSupplier.get() : null;
+        return null;
     }
 
     /**

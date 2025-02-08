@@ -1,7 +1,18 @@
-package java.lang;
+package java.lang.contract;
+
+import java.lang.Address;
+import java.lang.EventLog;
+import java.lang.String;
+import java.lang.UInt256;
+import java.lang.Bool;
+import java.lang.annotation.Payable;
+import java.lang.annotation.View;
 
 // SPDX-License-Identifier: MIT
 
+/**
+ * @dev Interface of the ERC-20 standard as defined in the ERC.
+ */
 public interface IERC20 {
 
     /**
@@ -11,8 +22,15 @@ public interface IERC20 {
      * Note that `value` may be zero.
      */
     class Transfer extends EventLog {
+        public final Address indexed_from;
+        public final Address indexed_to;
+        public final UInt256 value;
+
         public Transfer(Address from, Address to, UInt256 value) {
             super(String.format("Transfer event:  %s ->  %s :  %s", from, to, value));
+            this.indexed_from = from;
+            this.indexed_to = to;
+            this.value = value;
         }
     }
 
@@ -21,19 +39,28 @@ public interface IERC20 {
      * a call to {approve}. `value` is the new allowance.
      */
     class Approval extends EventLog {
+        public final Address indexed_owner;
+        public final Address indexed_spender;
+        public final UInt256 value;
+
         public Approval(Address owner, Address spender, UInt256 value) {
             super(String.format("Approval event:  %s approved  %s :  %s", owner, spender, value));
+            this.indexed_owner = owner;
+            this.indexed_spender = spender;
+            this.value = value;
         }
     }
 
     /**
      * @dev Returns the value of tokens in existence.
      */
+    @View
     UInt256 totalSupply();
 
     /**
      * @dev Returns the value of tokens owned by `account`.
      */
+    @View
     UInt256 balanceOf(Address account);
 
     /**
@@ -43,7 +70,8 @@ public interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    boolean transfer(Address to, UInt256 value);
+    @Payable    
+    Bool transfer(Address to, UInt256 value);
 
     /**
      * @dev Returns the remaining number of tokens that `spender` will be
@@ -52,6 +80,7 @@ public interface IERC20 {
      *
      * This value changes when {approve} or {transferFrom} are called.
      */
+    @View
     UInt256 allowance(Address owner, Address spender);
 
     /**
@@ -60,9 +89,17 @@ public interface IERC20 {
      *
      * Returns a boolean value indicating whether the operation succeeded.
      *
+     * IMPORTANT: Beware that changing an allowance with this method brings the risk
+     * that someone may use both the old and the new allowance by unfortunate
+     * transaction ordering. One possible solution to mitigate this race
+     * condition is to first reduce the spender's allowance to 0 and set the
+     * desired value afterwards:
+     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
+     *
      * Emits an {Approval} event.
      */
-    boolean approve(Address spender, UInt256 value);
+    @Payable
+    Bool approve(Address spender, UInt256 value);
 
     /**
      * @dev Moves a `value` amount of tokens from `from` to `to` using the
@@ -73,5 +110,6 @@ public interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    boolean transferFrom(Address from, Address to, UInt256 value);
+    @Payable
+    Bool transferFrom(Address from, Address to, UInt256 value);
 }

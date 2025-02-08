@@ -1,6 +1,6 @@
 package java.lang;
 import java.math.BigInteger;
-public final class UInt8 extends UInt<UInt8> {
+public final class UInt8 extends UIntType<UInt8> {
     static final int MAX_WIDTH = 1;  // 8 bits, stored in a single int
 
     public static final UInt8 MAX_VALUE = new UInt8(0xFF);

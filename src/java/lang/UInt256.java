@@ -10,7 +10,7 @@ import java.lang.bytes.Arrays;
  * to types of other widths in this package.  Copy constructors can be used to
  * explicitly promote or truncate values for the purposes of interoperability.
  */
-public final class UInt256 extends UInt<UInt256> {
+public final class UInt256 extends UIntType<UInt256> {
   static final int MAX_WIDTH = 8;
 
   /**
@@ -46,7 +46,7 @@ public final class UInt256 extends UInt<UInt256> {
    * Construct from a {@link UInt128}.
    */
   public UInt256(final UInt128 other) {
-    super(other, MAX_WIDTH);
+    super(other.ints, MAX_WIDTH);
   }
 
   /**

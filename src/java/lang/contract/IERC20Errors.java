@@ -1,4 +1,9 @@
-package java.lang;
+package java.lang.contract;
+
+import java.lang.Address;
+import java.lang.RuntimeException;
+import java.lang.String;
+import java.lang.UInt256;
 
 /**
  * Standard ERC20 Errors.
