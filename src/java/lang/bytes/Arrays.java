@@ -38,7 +38,6 @@ public final class Arrays {
     if(len > other.length)
       return 1;
 
-    int cmp;
     for(int i = 0; i < len; i++)
       if(ints[i] != other[i])
         return Integer.compareUnsigned(ints[i], other[i]);

@@ -5,7 +5,6 @@
 .project
 .settings
 bin
-/lib
 /distrib
 *.pdb
 *.swp

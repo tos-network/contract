@@ -3,12 +3,13 @@ package java.lang;
 import java.lang.bytes.Hex;
 import java.lang.bytes.Type;
 import java.math.BigInteger;
+import java.io.Storable;
 
 /**
  * Address type, which by default is equivalent to uint160 
  * which follows the Ethereum specification.
  */
-public class Address implements Type<String> {
+public class Address implements Type<String>, Storable {
 
     public static final String TYPE_NAME = "address";
     public static final int DEFAULT_LENGTH = 160;
@@ -85,5 +86,35 @@ public class Address implements Type<String> {
     @Override
     public int hashCode() {
         return value != null ? value.hashCode() : 0;
+    }
+
+    @Override
+    public void fromByteArray(byte[] data) {
+        value.fromByteArray(data);
+    }
+
+    @Override
+    public byte[] toByteArray() {
+        return value.toByteArray();
+    }
+
+    @Override
+    public void setSlot(int slot) {
+        value.setSlot(slot);    
+    }
+
+    @Override
+    public int getSlot() {
+        return value.getSlot();
+    }
+    
+    @Override
+    public boolean save() {
+        return value.save();
+    }
+
+    @Override
+    public boolean load() {
+        return value.load();
     }
 }

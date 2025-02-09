@@ -1,6 +1,14 @@
 package java.lang.contract;
 
+import java.lang.annotation.Pragma;
+
+@Pragma("0.8.18")
 public class MyToken extends ERC20  {
+    /**
+     * The total supply of the token.
+     */
+    private transient UInt256  _totalSupply;
+
     public MyToken() {
         super("MyToken", "MTK");
     }

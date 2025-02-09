@@ -4,12 +4,15 @@ import java.math.BigInteger;
 import java.lang.bytes.Arrays;
 import static java.lang.bytes.Arrays.LONG;  
 import java.lang.bytes.StringUtil;
+import java.io.Storable;
+import java.lang.contract.Storage;
 
-public abstract class UIntType<T extends UIntType<T>>
+public abstract class UIntType<T extends UIntType<T>> 
   extends    java.lang.Number
-  implements Comparable<T> {
+  implements Comparable<T>, Storable {
 
-  final int[] ints;
+  int[] ints;
+  private int slot;
 
   /* toString */
   static final int DEFAULT_RADIX = 10;
@@ -287,6 +290,12 @@ public abstract class UIntType<T extends UIntType<T>>
     return out;
   }
 
+  public final void fromByteArray(byte[] bytes) {
+    int intsi = ints.length - 1, v = 0;
+    for(int outi = bytes.length - 1, copied = 0; 0 <= outi; outi--, copied++)
+      ints[intsi--] = (v = (copied % 4 == 0) ? bytes[outi] : v << 8);
+  }
+
   /**
    * Return a big-endian int array.
    */
@@ -320,5 +329,53 @@ public abstract class UIntType<T extends UIntType<T>>
       return Long.toUnsignedString(((ints[0] & LONG) << 32) | (ints[1] & LONG), radix);
 
     return StringUtil.toString(ints, radix);
+  }
+
+  public abstract UIntType<?> getMaxValue();
+
+  /**
+   * Sets the slot of the object.
+   *
+   * @param slot The slot to set.
+   */
+  public void setSlot(int slot) {
+    this.slot = slot;
+  }
+
+  /**
+   * Gets the slot of the object.
+   *
+   * @return The slot of the object.
+   */
+  public int getSlot() {
+    return slot;
+  }
+  /**
+   * Saves the object to the storage.
+   *
+   * @return true if the object was saved successfully, false otherwise.
+   */
+  @Override
+  public boolean save() {
+    Storage storage = Storage.getStorage();
+    storage.SetStorageFixedValue(getSlot(), toByteArray());
+    return true;
+  }
+
+  @Override
+  public boolean load() {
+    // if the slot is not set, return true
+    if (getSlot() == Storable.NO_SLOT) {
+      return true;
+    }
+    Storage storage = Storage.getStorage();
+    byte[] bytes = storage.GetStorageFixedValue(getSlot());
+    if (bytes == null) {
+      ints = new int[0]; 
+      return true;
+    }
+    UIntType<?> maxValue = getMaxValue();
+    ints = Arrays.from(bytes, maxValue.ints);
+    return true;
   }
 }

@@ -9,6 +9,7 @@ import java.lang.UInt8;
 import java.lang.annotation.View;
 import static java.lang.Bool.TRUE;
 import java.lang.annotation.Payable;
+import java.lang.annotation.Pragma;
 
 // SPDX-License-Identifier: MIT
 
@@ -24,11 +25,34 @@ import java.lang.annotation.Payable;
  * We have followed general OpenZeppelin Contracts guidelines: functions revert
  * instead returning `false` on failure.
  */
+@Pragma("0.8.18")  
 public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Metadata {
-    private final Mapping<Address, UInt256> balances = new Mapping<Address, UInt256>();
-    private final Mapping<Address, Mapping<Address, UInt256>> allowances = new Mapping<Address, Mapping<Address, UInt256>>();
+
+    /**
+     * Mapping of address to balance
+     */
+    private final Mapping<Address, UInt256> balances =
+         Mapping.of(Address.class, UInt256.class);
+ 
+    /**
+     * Mapping of address to allowance
+     */
+    private final Mapping<Address, Mapping<Address, UInt256>> allowances = 
+        Mapping.ofNested(Address.class, UInt256.class);  
+ 
+    /**
+     * Total supply of the token
+     */ 
     private UInt256 totalSupply = UInt256.ZERO;
+
+    /**
+     * Name of the token
+     */
     private final String name;
+
+    /**
+     * Symbol of the token
+     */
     private final String symbol;
 
     /**
@@ -42,12 +66,18 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
         this.symbol = symbol_;
     }
 
+    /**
+     * @dev Returns the name of the token.
+     */
     @View
     @Override
     public String name() {
         return name;
     }
 
+    /**
+     * @dev Returns the symbol of the token.
+     */
     @View
     @Override
     public String symbol() {
@@ -55,7 +85,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
     }
 
     /**
-     * @dev Returns the number of decimals used to get its user representation.
+    * @dev Returns the number of decimals used to get its user representation.
      * For example, if `decimals` equals `2`, a balance of `505` tokens should
      * be displayed to a user as `5.05` (`505 / 10 ** 2`).
      *
@@ -69,18 +99,27 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
         return new UInt8(18);
     }
 
+    /**
+     * @dev Returns the total supply of the token.
+     */
     @View
     @Override
     public UInt256 totalSupply() {
         return totalSupply;
     }
 
+    /**
+     * @dev Returns the balance of the token for a given account.
+     */
     @View
     @Override
     public UInt256 balanceOf(Address account) {
         return balances.get(account);
     }
 
+    /**
+     * @dev Transfers a `value` amount of tokens from the caller to `to`.
+     */
     @Payable
     @Override
     public Bool transfer(Address to, UInt256 value) {
@@ -89,12 +128,20 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
         return TRUE;
     }
 
+    /**
+     * @dev Returns the remaining number of tokens that `spender` will be
+     * allowed to spend on behalf of `owner` through {transferFrom}. This is
+     * zero by default.
+     */
     @View
     @Override
     public UInt256 allowance(Address owner, Address spender) {
         return allowances.get(owner).get(spender);
     }
 
+    /**
+     * @dev Sets `value` as the allowance of `spender` over the caller's tokens.
+     */
     @Payable
     @Override
     public Bool approve(Address spender, UInt256 value) {
@@ -158,7 +205,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
             if (fromBalance.compareTo(value) < 0) {
                 revert(new ERC20InsufficientBalance(from, fromBalance, value));
             }
-            balances.set(from, fromBalance.subtract(value));
+            balances.set(fromBalance.subtract(value), from);
         }
 
         if (Address.ZERO_ADDRESS.equals(to)) {
@@ -166,7 +213,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
             totalSupply = totalSupply.subtract(value);
         } else {
             UInt256 toBalance = balanceOf(to);
-            balances.set(to, toBalance.add(value));
+            balances.set(toBalance.add(value), to);
         }
 
         emit(new Transfer(from, to, value));
@@ -202,6 +249,9 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
         _update(account, Address.ZERO_ADDRESS, value);
     }
 
+    /**
+     * @dev Sets `value` as the allowance of `spender` over the caller's tokens.
+     */
     protected void _approve(Address owner, Address spender, UInt256 value) {
         _approve(owner, spender, value, true);
     }
@@ -218,8 +268,8 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
         }
 
         Mapping<Address, UInt256> ownerAllowances = allowances.get(owner);
-        ownerAllowances.set(spender, value);
-        allowances.set(owner, ownerAllowances);
+        ownerAllowances.set(value, spender);
+        allowances.set(ownerAllowances, owner);
 
         if (emitEvent) {
             emit(new Approval(owner, spender, value));

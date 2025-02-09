@@ -234,4 +234,9 @@ public final class UInt256 extends UIntType<UInt256> {
       return Arrays.compare(ints, (BigInteger)other, MAX_WIDTH) == 0;
     return super.equals(other);
   }
+
+  @Override
+  public UIntType<UInt256> getMaxValue() {
+    return MAX_VALUE;
+  }
 }

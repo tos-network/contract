@@ -234,4 +234,9 @@ public final class UInt128 extends UIntType<UInt128> {
       return Arrays.compare(ints, (BigInteger)other, MAX_WIDTH) == 0;
     return super.equals(other);
   }
+
+  @Override
+  public UIntType<UInt128> getMaxValue() {
+    return MAX_VALUE;
+  }
 }

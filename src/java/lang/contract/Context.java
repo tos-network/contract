@@ -1,4 +1,7 @@
-package java.lang;
+package java.lang.contract;
+
+import java.lang.Address;
+import java.lang.UInt256;
 
 // SPDX-License-Identifier: MIT
 
@@ -9,31 +12,25 @@ package java.lang;
  * This contract is only required for intermediate, library-like contracts.
  */
 public abstract class Context {
+
     // Message is a class that contains the sender of the transaction and its data.
-    protected final Message msg = new Message();
+    protected final Message msg = Message.getMessage();
+
+    // Storage is a class that contains the storage of the contract.
+    protected final Storage storage = Storage.getStorage();
 
     // Returns the sender of the transaction.
-    protected Address _msgSender() {
+    protected final Address _msgSender() {
         return msg.sender;
     }
 
     // Returns the data of the transaction.
-    protected byte[] _msgData() {
+    protected final byte[] _msgData() {
         return msg.data;
     }
 
     // Returns the length of the context suffix.
-    protected UInt256 _contextSuffixLength() {
+    protected final UInt256 _contextSuffixLength() {
         return UInt256.ZERO;
-    }
-
-    // Reverts the transaction with the given exception.
-    public static void revert(RuntimeException re) {
-        throw new RevertException(re.getMessage()); 
-    }
-
-    // Emits an event.  
-    public static void emit(EventLog el) {
-        System.out.println(el.getMessage());
     }
 }

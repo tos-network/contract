@@ -137,4 +137,9 @@ public final class UInt8 extends UIntType<UInt8> {
         if (mod.value == 0) throw new ArithmeticException("Modulo by zero");
         return new UInt8((value + add.value) % mod.value);
     }
+
+    @Override
+    public UIntType<UInt8> getMaxValue() {
+        return MAX_VALUE;
+    }
 }

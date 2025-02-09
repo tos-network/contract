@@ -232,4 +232,9 @@ public final class UInt64 extends UIntType<UInt64> {
             return Arrays.compare(ints, (BigInteger) other, MAX_WIDTH) == 0;
         return super.equals(other);
     }
+
+    @Override
+    public UIntType<UInt64> getMaxValue() {
+        return MAX_VALUE;
+    }
 }

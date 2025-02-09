@@ -1,5 +1,7 @@
 package java.lang.contract;
 import java.lang.reflect.Field;
+import java.io.Storable;
+
 
 // SPDX-License-Identifier: MIT
 
@@ -10,47 +12,82 @@ public abstract class Contract extends Context implements Callable<byte[]>
         super();
     }
 
-    // beforeCall is called before the call is made.
-    protected void beforeCall() {
-        String className = this.getClass().getSimpleName();
-        System.out.println("step10" + className);    
-        
-        // get all fields
-        Field[] declaredFields = this.getClass().getDeclaredFields();
-        System.out.println("Current class fields: " + declaredFields.length);
-        // print current class fields
-        for (Field field : declaredFields) {
-            field.setAccessible(true); // allow access private fields
-            System.out.println("Current class field: " + className + "." + field.getName() + "=" + field.getType());
+    // Requires the given condition to be true.
+    public final static void require(boolean condition, String message) {
+        if (!condition) {
+            throw new AssertionError(new RuntimeException(message));
         }
-        
-        // recursively get and print all parent class fields
-        Class<?> superClass = this.getClass().getSuperclass();
-        while (superClass != null && !superClass.equals(Object.class)) {
-            Field[] parentFields = superClass.getDeclaredFields();
-            System.out.println(superClass.getSimpleName() + " fields: " + parentFields.length);
-            
-            for (Field field : parentFields) {
-                field.setAccessible(true); // allow access private fields
-                System.out.println("Parent class field: " + superClass.getSimpleName() + "." + field.getName() + "=" + field.getType());
-            }
-            
-            superClass = superClass.getSuperclass();
-        }
+    }
+  
+    // Reverts the transaction with the given exception.
+    public final static void revert(RuntimeException re) {
+        throw new RevertException(re.getMessage()); 
+    }
+
+    // Emits an event.  
+    public final static void emit(EventLog el) {
+        System.out.println(el.getMessage());
     }
 
     @Override
     public byte[] call() throws Exception {
-        System.out.println("step6");
         beforeCall();
-        System.out.println("step7");
         byte[] result = executeCall();
-        System.out.println("step8");
         afterCall();
-        System.out.println("step9");
         return result;
     }
 
+
+    // beforeCall is called before the call is made.
+    protected void beforeCall() {
+        int slotCounter = 0;  // use for auto assign storage slot
+        
+        // loop through the fields of the current class
+        for (Field field : this.getClass().getDeclaredFields()) {
+            // Skip static and transient fields
+            int modifiers = field.getModifiers();
+            if (java.lang.reflect.Modifier.isStatic(modifiers) || 
+                java.lang.reflect.Modifier.isTransient(modifiers)) {
+                continue;
+            }
+            field.setAccessible(true);
+            try {
+                Object fieldValue = field.get(this);
+                if (fieldValue instanceof Storable) {
+                    Storable storable = (Storable) fieldValue;
+                    storable.setSlot(slotCounter++);
+                    storable.load();
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        
+        // loop through the fields of the superclass
+        Class<?> superClass = this.getClass().getSuperclass();
+        while (superClass != null && !superClass.equals(Contract.class)) {
+            for (Field field : superClass.getDeclaredFields()) {
+                // Skip static and transient fields
+                int modifiers = field.getModifiers();
+                if (java.lang.reflect.Modifier.isStatic(modifiers) || 
+                    java.lang.reflect.Modifier.isTransient(modifiers)) {
+                    continue;
+                }
+                field.setAccessible(true);
+                try {
+                    Object fieldValue = field.get(this);
+                    if (fieldValue instanceof Storable) {
+                        Storable storable = (Storable) fieldValue;
+                        storable.setSlot(slotCounter++);
+                        storable.load();
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            superClass = superClass.getSuperclass();
+        }
+    }
 
     // executeCall is called to execute the call.
     protected  byte[] executeCall() throws Exception {

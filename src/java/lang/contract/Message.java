@@ -1,15 +1,38 @@
-package java.lang;
+package java.lang.contract;
+
+import java.lang.Address;
+import java.lang.Override;
+import java.lang.String;
+import java.lang.System;
+import java.lang.UInt160;
+import java.lang.UInt256;
+import java.lang.UInt64;
 
 /**
  * Represents a message with a sender and data.
  */
 public class Message {
-    protected final Address sender;  // Sender of the message
+
+    // Sender of the message
+    protected final Address sender; 
+    
+    // Value of the message
     private final UInt256 value;
-    protected final byte[] data;     // Data contained in the message
+    
+    // Data contained in the message
+    protected final byte[] data;    
+
+    // Asset of the message
     protected final UInt64 asset;
+    
+    // Signature of the method
     protected final byte[] sig;
+    
+    // Gas of the message
     protected final UInt256 gas;
+
+    // Singleton pattern
+    private static Message message;
   
     /**
      * Native method to get the sender address of the message.
@@ -66,6 +89,19 @@ public class Message {
         this.gas = new UInt256(nativeGetGas());
     }
 
+
+    /**
+     * Returns a new Message object.
+     *
+     * @return A new Message object.
+     */
+    public static Message getMessage() {
+        if (message == null) {
+            message = new Message();
+        }
+        return message;
+    }
+
     /**
      * Returns the sender of the message.
      *
@@ -75,6 +111,11 @@ public class Message {
         return sender;
     }
 
+    /**
+     * Returns the value of the message.
+     *
+     * @return The value of the message.
+     */
     public final UInt256 getValue() {
         return value;
     }
@@ -88,14 +129,29 @@ public class Message {
         return data;
     }
 
+    /**
+     * Returns the asset of the message.
+     *
+     * @return The asset of the message.
+     */
     public final UInt64 getAsset() {
         return asset;
     }
 
+    /**
+     * Returns the signature of the message.
+     *
+     * @return The signature of the message.
+     */
     public final byte[] getSig() {
         return sig;
     }
 
+    /**
+     * Returns the gas of the message.
+     *
+     * @return The gas of the message.
+     */
     public final UInt256 getGas() {
         return gas;
     }
@@ -121,7 +177,7 @@ public class Message {
      * Load the native library when the class is loaded.
      */
     static {
-        System.loadLibrary("message"); // Load libmessage.so/message.dll
+        System.loadLibrary("java.lang.contract.Message"); // Load libmessage.so/message.dll
     }
 
 }
