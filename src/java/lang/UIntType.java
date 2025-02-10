@@ -1,13 +1,15 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.bytes.Arrays;
-import static java.lang.bytes.Arrays.LONG;  
-import java.lang.bytes.StringUtil;
+
+import static java.lang.types.Arrays.LONG;
+
 import java.io.Storable;
 import java.lang.contract.Storage;
+import java.lang.types.Arrays;
+import java.lang.types.StringUtil;
 
-public abstract class UIntType<T extends UIntType<T>> 
+public abstract class uintType<T extends uintType<T>> 
   extends    java.lang.Number
   implements Comparable<T>, Storable {
 
@@ -17,31 +19,31 @@ public abstract class UIntType<T extends UIntType<T>>
   /* toString */
   static final int DEFAULT_RADIX = 10;
 
-  UIntType(final long l) {
+  uintType(final long l) {
     this.ints = Arrays.valueOf(l);
   }
 
-  UIntType(final int[] ints) {
+  uintType(final int[] ints) {
     this.ints = ints;
   }
 
-  UIntType(final int[] ints, final int maxWidth) {
+  uintType(final int[] ints, final int maxWidth) {
     this(Arrays.stripLeadingZeroes(ints, Math.max(0, ints.length - maxWidth)));
   }
 
-  UIntType(final UIntType<?> other, final int maxWidth) {
+  uintType(final uintType<?> other, final int maxWidth) {
     this(other.ints, maxWidth);
   }
 
-  UIntType(final String s, final int radix, final int maxWidth) {
+  uintType(final String s, final int radix, final int maxWidth) {
     this.ints = StringUtil.fromString(s, radix, maxWidth);
   }
 
-  UIntType(final BigInteger b, final int maxWidth) {
+  uintType(final BigInteger b, final int maxWidth) {
     this(Arrays.from(b, maxWidth), maxWidth);
   }
 
-  UIntType(final byte[] bytes, final UIntType<?> maxValue) {
+  uintType(final byte[] bytes, final uintType<?> maxValue) {
     this(Arrays.from(bytes, maxValue.ints), maxValue.ints.length);
   }
 
@@ -192,8 +194,8 @@ public abstract class UIntType<T extends UIntType<T>>
   }
 
   public boolean equals(final Object other) {
-    if(other instanceof UIntType<?>) 
-        return Arrays.compare(ints, ((UIntType<?>)other).ints) == 0;
+    if(other instanceof uintType<?>) 
+        return Arrays.compare(ints, ((uintType<?>)other).ints) == 0;
     return false;
   }
 
@@ -331,7 +333,7 @@ public abstract class UIntType<T extends UIntType<T>>
     return StringUtil.toString(ints, radix);
   }
 
-  public abstract UIntType<?> getMaxValue();
+  public abstract uintType<?> getMaxValue();
 
   /**
    * Sets the slot of the object.
@@ -374,7 +376,7 @@ public abstract class UIntType<T extends UIntType<T>>
       ints = new int[0]; 
       return true;
     }
-    UIntType<?> maxValue = getMaxValue();
+    uintType<?> maxValue = getMaxValue();
     ints = Arrays.from(bytes, maxValue.ints);
     return true;
   }

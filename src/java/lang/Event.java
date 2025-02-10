@@ -1,8 +1,8 @@
 package java.lang;
 
-public class EventLog {
+public class Event {
     private String message;
-    public EventLog(String message) {
+    public Event(String message) {
         this.message = message;
     }
 

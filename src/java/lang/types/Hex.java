@@ -1,4 +1,4 @@
-package java.lang.bytes;
+package java.lang.types;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

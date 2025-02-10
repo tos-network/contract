@@ -1,44 +1,44 @@
 package java.lang;
 
-import java.lang.bytes.Hex;
-import java.lang.bytes.Type;
 import java.math.BigInteger;
 import java.io.Storable;
+import java.lang.types.Hex;
+import java.lang.types.Type;
 
 /**
  * Address type, which by default is equivalent to uint160 
  * which follows the Ethereum specification.
  */
-public class Address implements Type<String>, Storable {
+public class address implements Type<String>, Storable {
 
     public static final String TYPE_NAME = "address";
     public static final int DEFAULT_LENGTH = 160;
-    public static final Address DEFAULT = new Address(BigInteger.ZERO);
-    public static final Address ZERO_ADDRESS = new Address(BigInteger.ZERO);
+    public static final address DEFAULT = new address(BigInteger.ZERO);
+    public static final address ZERO_ADDRESS = new address(BigInteger.ZERO);
 
-    private final UInt160 value;
+    private final uint160 value;
 
-    public Address(UInt160 value) {
+    public address(uint160 value) {
         this.value = value;
     }
 
-    public Address(BigInteger value) {
+    public address(BigInteger value) {
         this(DEFAULT_LENGTH, value);
     }
 
-    public Address(int bitSize, BigInteger value) {
-        this(new UInt160(value));
+    public address(int bitSize, BigInteger value) {
+        this(new uint160(value));
     }
 
-    public Address(String hexValue) {
+    public address(String hexValue) {
         this(DEFAULT_LENGTH, hexValue);
     }
 
-    public Address(int bitSize, String hexValue) {
+    public address(int bitSize, String hexValue) {
         this(bitSize, Hex.toBigInt(hexValue));
     }
 
-    public UInt160 toUint() {
+    public uint160 toUint() {
         return value;
     }
 
@@ -78,9 +78,9 @@ public class Address implements Type<String>, Storable {
             return false;
         }
 
-        Address address = (Address) o;
+        address addr = (address) o;
 
-        return value != null ? value.equals(address.value) : address.value == null;
+        return value != null ? value.equals(addr.value) : addr.value == null;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package java.lang;
 
+import java.lang.types.Arrays;
 import java.math.BigInteger;
-import java.lang.bytes.Arrays;
 
 /**
  * Represents unsigned values less than {@code 2**256}.
@@ -10,17 +10,17 @@ import java.lang.bytes.Arrays;
  * to types of other widths in this package.  Copy constructors can be used to
  * explicitly promote or truncate values for the purposes of interoperability.
  */
-public final class UInt extends UIntType<UInt> {
+public final class uint extends uintType<uint> {
   static final int MAX_WIDTH = 8;
 
   /**
    * Maximum representable value.
    */
-  public static UInt MAX_VALUE = new UInt(Arrays.maxValue(MAX_WIDTH));
+  public static uint MAX_VALUE = new uint(Arrays.maxValue(MAX_WIDTH));
 
-  public static UInt ZERO = new UInt(Arrays.ZERO);
-  public static UInt ONE  = new UInt(Arrays.ONE);
-  public static UInt TWO  = new UInt(Arrays.TWO);
+  public static uint ZERO = new uint(Arrays.ZERO);
+  public static uint ONE  = new uint(Arrays.ONE);
+  public static uint TWO  = new uint(Arrays.TWO);
 
   /**
    * Construct from a big-endian {@code int} array.
@@ -28,7 +28,7 @@ public final class UInt extends UIntType<UInt> {
    * If {@code ints} exceeds {@link MAX_VALUE}, only the maximum prefix
    * will be considered.  Leaves {@code ints} untouched.
    */
-  public UInt(final int[] ints) {
+  public uint(final int[] ints) {
     super(ints, MAX_WIDTH);
   }
 
@@ -38,14 +38,14 @@ public final class UInt extends UIntType<UInt> {
    * If {@code bytes} exceeds {@link MAX_VALUE}, only the maximum prefix
    * will be considered.  Leaves {@code bytes} untouched.
    */
-  public UInt(final byte[] bytes) {
+  public uint(final byte[] bytes) {
     super(bytes, MAX_VALUE);
   }
 
   /**
-   * Construct from a {@link UInt128}.
+   * Construct from a {@link uint128}.
    */
-  public UInt(final UInt128 other) {
+  public uint(final uint128 other) {
     super(other.ints, MAX_WIDTH);
   }
 
@@ -56,7 +56,7 @@ public final class UInt extends UIntType<UInt> {
    *
    * @throws NumberFormatException Negative, invalid or zero-length number.
    */
-  public UInt(final String s) {
+  public uint(final String s) {
     this(s, 10);
   }
 
@@ -67,7 +67,7 @@ public final class UInt extends UIntType<UInt> {
    *
    * @throws NumberFormatException Negative, invalid or zero-length number.
    */
-  public UInt(final String s, final int radix) {
+  public uint(final String s, final int radix) {
     super(s, radix, MAX_WIDTH);
   }
 
@@ -76,112 +76,112 @@ public final class UInt extends UIntType<UInt> {
    *
    * If {@code b} exceeds {@link MAX_VALUE}, it's truncated.
    */
-  public UInt(final BigInteger b) { super(b, MAX_WIDTH); }
+  public uint(final BigInteger b) { super(b, MAX_WIDTH); }
 
   /**
    * Construct from a {@code long}, when considered unsigned.
    *
    * For low values of {@code v}, an array cache may be used.
    */
-  public UInt(final long v) { super(v); }
+  public uint(final long v) { super(v); }
 
-  public UInt not() {
-    return new UInt(Arrays.not(ints, MAX_VALUE.ints));
+  public uint not() {
+    return new uint(Arrays.not(ints, MAX_VALUE.ints));
   }
 
-  public UInt and(final UInt other) {
-    return new UInt(Arrays.and(ints, other.ints));
+  public uint and(final uint other) {
+    return new uint(Arrays.and(ints, other.ints));
   }
 
-  public UInt or(final UInt other) {
-    return new UInt(Arrays.or(ints, other.ints));
+  public uint or(final uint other) {
+    return new uint(Arrays.or(ints, other.ints));
   }
 
-  public UInt xor(final UInt other) {
-    return new UInt(Arrays.xor(ints, other.ints));
+  public uint xor(final uint other) {
+    return new uint(Arrays.xor(ints, other.ints));
   }
 
-  public UInt setBit(final int bit) {
+  public uint setBit(final int bit) {
     if(bit < 0)
       throw new ArithmeticException("Negative bit address");
     return ((MAX_WIDTH <= bit >>> 5) ? this :
-            new UInt(Arrays.setBit(ints, bit)));
+            new uint(Arrays.setBit(ints, bit)));
   }
 
-  public UInt clearBit(final int bit) {
+  public uint clearBit(final int bit) {
     if(bit < 0)
       throw new ArithmeticException("Negative bit address");
     return ((ints.length <= bit >>> 5) ? this :
-            new UInt(Arrays.clearBit(ints, bit)));
+            new uint(Arrays.clearBit(ints, bit)));
   }
 
-  public UInt flipBit(final int bit) {
+  public uint flipBit(final int bit) {
      if(bit < 0)
        throw new ArithmeticException("Negative bit address");
      return ((MAX_WIDTH <= bit >>> 5) ? this :
-             new UInt(Arrays.flipBit(ints, bit)));
+             new uint(Arrays.flipBit(ints, bit)));
   }
 
-  public UInt shiftLeft(final int places) {
-    return new UInt(
+  public uint shiftLeft(final int places) {
+    return new uint(
       0 < places ?
       Arrays.lshift(ints,  places, MAX_WIDTH) :
       Arrays.rshift(ints, -places, MAX_WIDTH));
   }
 
-  public UInt shiftRight(final int places) {
-    return new UInt(
+  public uint shiftRight(final int places) {
+    return new uint(
       0 < places ?
       Arrays.rshift(ints,  places, MAX_WIDTH) :
       Arrays.lshift(ints, -places, MAX_WIDTH));
   }
 
-  public UInt inc() {
-    return new UInt(Arrays.inc(ints, MAX_WIDTH));
+  public uint inc() {
+    return new uint(Arrays.inc(ints, MAX_WIDTH));
   }
 
-  public UInt dec() {
-    return isZero() ? MAX_VALUE : new UInt(Arrays.dec(ints));
+  public uint dec() {
+    return isZero() ? MAX_VALUE : new uint(Arrays.dec(ints));
   }
 
-  public UInt add(final UInt other) {
+  public uint add(final uint other) {
     return (isZero() ? other :
             (other.isZero() ? this :
-             new UInt(Arrays.add(ints, other.ints, MAX_WIDTH))));
+             new uint(Arrays.add(ints, other.ints, MAX_WIDTH))));
   }
 
-  public UInt addmod(final UInt add, final UInt mod) {
+  public uint addmod(final uint add, final uint mod) {
     if(mod.isZero())
       throw new ArithmeticException("div/mod by zero");
     if(isZero() && add.isZero())
       return ZERO;
-    return new UInt(Arrays.addmod(ints, add.ints, mod.ints));
+    return new uint(Arrays.addmod(ints, add.ints, mod.ints));
   }
 
-  public UInt subtract(final UInt other) {
+  public uint subtract(final uint other) {
     if(other.isZero())
       return this;
     final int cmp = compareTo(other);
     return (cmp == 0 ? ZERO :
-            new UInt(
+            new uint(
               cmp < 0 ?
               Arrays.subgt(ints, other.ints, MAX_VALUE.ints) :
               Arrays.sub  (ints, other.ints)));
   }
 
-  public UInt multiply(final UInt other) {
+  public uint multiply(final uint other) {
     if(ints.length == 0 || other.ints.length == 0)
       return ZERO;
-    return new UInt(Arrays.multiply(ints, other.ints, MAX_WIDTH));
+    return new uint(Arrays.multiply(ints, other.ints, MAX_WIDTH));
   }
 
-  public UInt mulmod(final UInt mul, final UInt mod) {
+  public uint mulmod(final uint mul, final uint mod) {
     if(mod.isZero())
       throw new ArithmeticException("div/mod by zero");
-    return new UInt(Arrays.mulmod(ints, mul.ints, mod.ints));
+    return new uint(Arrays.mulmod(ints, mul.ints, mod.ints));
   }
 
-  public UInt pow(final int exp) {
+  public uint pow(final int exp) {
     if(exp < 0)
       throw new ArithmeticException("Negative exponent");
     if(exp == 0)
@@ -189,10 +189,10 @@ public final class UInt extends UIntType<UInt> {
     if(isZero())
       return this;
     return (exp == 1 ? this :
-            new UInt(Arrays.pow(ints, getLowestSetBit(), exp, MAX_WIDTH)));
+            new uint(Arrays.pow(ints, getLowestSetBit(), exp, MAX_WIDTH)));
   }
 
-  public UInt divide(final UInt other) {
+  public uint divide(final uint other) {
     if(other.isZero())
       throw new ArithmeticException("div/mod by zero");
     if(isZero())
@@ -200,10 +200,10 @@ public final class UInt extends UIntType<UInt> {
     final int cmp = compareTo(other);
     return (cmp  <  0 ? ZERO :
             (cmp == 0 ? ONE  :
-             new UInt(Arrays.divide(ints, other.ints))));
+             new uint(Arrays.divide(ints, other.ints))));
   }
 
-  public UInt mod(final UInt other) {
+  public uint mod(final uint other) {
     if(other.isZero())
       throw new ArithmeticException("div/mod by zero");
     if(isZero())
@@ -211,22 +211,22 @@ public final class UInt extends UIntType<UInt> {
     final int cmp = compareTo(other);
     return (cmp  <  0 ? this :
             (cmp == 0 ? ZERO :
-             new UInt(Arrays.mod(ints, other.ints))));
+             new uint(Arrays.mod(ints, other.ints))));
   }
 
-  public UInt[] divmod(final UInt other) {
+  public uint[] divmod(final uint other) {
     if(other.isZero())
       throw new ArithmeticException("div/mod by zero");
     if(isZero())
-      return new UInt[]{ZERO, ZERO};
+      return new uint[]{ZERO, ZERO};
     final int cmp = compareTo(other);
     if(cmp < 0)
-      return new UInt[]{ZERO, this};
+      return new uint[]{ZERO, this};
     if(cmp == 0)
-      return new UInt[]{ONE, ZERO};
+      return new uint[]{ONE, ZERO};
 
     final int[][] qr = Arrays.divmod(ints, other.ints);
-    return new UInt[]{new UInt(qr[0]), new UInt(qr[1])};
+    return new uint[]{new uint(qr[0]), new uint(qr[1])};
   }
 
   public boolean equals(final Object other) {
@@ -236,7 +236,7 @@ public final class UInt extends UIntType<UInt> {
   }
 
   @Override
-  public UIntType<UInt> getMaxValue() {
+  public uintType<uint> getMaxValue() {
     return MAX_VALUE;
   }
 }

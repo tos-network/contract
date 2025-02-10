@@ -3,11 +3,26 @@ import java.io.Storable;
 import java.nio.charset.StandardCharsets;
 import java.lang.contract.Storage;
 
-public class CString implements Storable {
+public class string implements Storable {
     private int slot;
     private String value;
 
-    public CString(String initialValue) {
+    /**
+     * Returns a string representation of the specified value.
+     *
+     * @param str The value to convert to a string.
+     * @return A string representation of the specified value.
+     */
+    public static string valueOf(String str) {
+        return new string(str);
+    }
+
+    /**
+     * Constructs a new string with the specified initial value.
+     *
+     * @param initialValue The initial value of the string.
+     */
+    public string(String initialValue) {
         this.slot = Storable.NO_SLOT;
         this.value = initialValue;
     }

@@ -1,6 +1,6 @@
-package java.lang.bytes;
+package java.lang.types;
 
-import static java.lang.bytes.Arrays.LONG;
+import static java.lang.types.Arrays.LONG;
 
 /**
  * These constants are basically ripped from OpenJDK.

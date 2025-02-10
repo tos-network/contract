@@ -21,11 +21,11 @@ public abstract class Contract extends Context implements Callable<byte[]>
   
     // Reverts the transaction with the given exception.
     public final static void revert(RuntimeException re) {
-        throw new RevertException(re.getMessage()); 
+        throw new Revert(re.getMessage()); 
     }
 
     // Emits an event.  
-    public final static void emit(EventLog el) {
+    public final static void emit(Event el) {
         System.out.println(el.getMessage());
     }
 

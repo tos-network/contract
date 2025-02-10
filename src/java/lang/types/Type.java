@@ -1,4 +1,4 @@
-package java.lang.bytes;
+package java.lang.types;
 
 /** ABI Types. */
 public interface Type<T> {

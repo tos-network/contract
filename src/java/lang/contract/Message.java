@@ -1,12 +1,12 @@
 package java.lang.contract;
 
-import java.lang.Address;
+import java.lang.address;
 import java.lang.Override;
 import java.lang.String;
 import java.lang.System;
-import java.lang.UInt160;
-import java.lang.UInt256;
-import java.lang.UInt64;
+import java.lang.uint160;
+import java.lang.uint256;
+import java.lang.uint64;
 
 /**
  * Represents a message with a sender and data.
@@ -14,22 +14,22 @@ import java.lang.UInt64;
 public class Message {
 
     // Sender of the message
-    protected final Address sender; 
+    protected final address sender; 
     
     // Value of the message
-    private final UInt256 value;
+    private final uint256 value;
     
     // Data contained in the message
     protected final byte[] data;    
 
     // Asset of the message
-    protected final UInt64 asset;
+    protected final uint64 asset;
     
     // Signature of the method
     protected final byte[] sig;
     
     // Gas of the message
-    protected final UInt256 gas;
+    protected final uint256 gas;
 
     // Singleton pattern
     private static Message message;
@@ -81,12 +81,12 @@ public class Message {
      *
      */
     public Message() {
-        this.sender = new Address(new UInt160(nativeGetSender()));
-        this.value = new UInt256(nativeGetValue());
+        this.sender = new address(new uint160(nativeGetSender()));
+        this.value = new uint256(nativeGetValue());
         this.data = nativeGetData();
-        this.asset = new UInt64(nativeGetAsset());
+        this.asset = new uint64(nativeGetAsset());
         this.sig = nativeGetSig();
-        this.gas = new UInt256(nativeGetGas());
+        this.gas = new uint256(nativeGetGas());
     }
 
 
@@ -107,7 +107,7 @@ public class Message {
      *
      * @return The sender of the message.
      */
-    public final Address getSender() {
+    public final address getSender() {
         return sender;
     }
 
@@ -116,7 +116,7 @@ public class Message {
      *
      * @return The value of the message.
      */
-    public final UInt256 getValue() {
+    public final uint256 getValue() {
         return value;
     }
     
@@ -134,7 +134,7 @@ public class Message {
      *
      * @return The asset of the message.
      */
-    public final UInt64 getAsset() {
+    public final uint64 getAsset() {
         return asset;
     }
 
@@ -152,7 +152,7 @@ public class Message {
      *
      * @return The gas of the message.
      */
-    public final UInt256 getGas() {
+    public final uint256 getGas() {
         return gas;
     }
 

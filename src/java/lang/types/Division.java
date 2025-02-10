@@ -1,4 +1,4 @@
-package java.lang.bytes;
+package java.lang.types;
 
 final class Division {
   private static long LONG = 0xffffffffL;

@@ -1,7 +1,6 @@
 package java.lang.contract;
-
-import java.lang.String;
-import java.lang.UInt8;
+import java.lang.string;
+import java.lang.uint8;
 
 // SPDX-License-Identifier: MIT
 
@@ -10,15 +9,15 @@ public interface IERC20Metadata extends IERC20 {
     /**
      * @dev Returns the name of the token.
      */
-    String name();
+    string name();
 
     /**
      * @dev Returns the symbol of the token.
      */
-    String symbol();
+    string symbol();
 
     /**
      * @dev Returns the decimal places of the token.
      */
-    UInt8 decimals();
+    uint8 decimals();
 }

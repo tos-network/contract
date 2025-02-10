@@ -12,7 +12,7 @@ import java.util.Map;
  * @param <K> Type of the key (must implement Storable)
  * @param <V> Type of the value (must implement Storable)
  */
-public class Mapping<K extends Storable, V extends Storable> implements java.io.Storable {
+public class mapping<K extends Storable, V extends Storable> implements java.io.Storable {
     private int slot = Storable.NO_SLOT;
     private final Map<String, Object> cache;  // Cache for both values and nested mappings
     private final Class<K> keyType;
@@ -26,8 +26,8 @@ public class Mapping<K extends Storable, V extends Storable> implements java.io.
      * @param valueType The class type of the value
      * @return A new mapping instance
      */
-    public static <K extends Storable, V extends Storable> Mapping<K, V> of(Class<K> keyType, Class<V> valueType) {
-        return new Mapping<>(keyType, valueType);
+    public static <K extends Storable, V extends Storable> mapping<K, V> of(Class<K> keyType, Class<V> valueType) {
+        return new mapping<>(keyType, valueType);
     }
     
     /**
@@ -37,20 +37,20 @@ public class Mapping<K extends Storable, V extends Storable> implements java.io.
      * @param valueType The class type of the value
      * @return A new nested mapping instance
      */
-    @SuppressWarnings("unchecked")
-    public static <K extends Storable, V extends Storable> Mapping<K, Mapping<K, V>> ofNested(Class<K> keyType, Class<V> valueType) {
-        return new Mapping<>(keyType, (Class<Mapping<K, V>>) (Class<?>) Mapping.class);
+    @SuppressWarnings("unchecked")  
+    public static <K extends Storable, V extends Storable> mapping<K, mapping<K, V>> ofNested(Class<K> keyType, Class<V> valueType) {
+        return new mapping<>(keyType, (Class<mapping<K, V>>) (Class<?>) mapping.class);
     }
 
     /**
      * Constructor for creating a new mapping
      */
-    public Mapping(Class<K> keyType, Class<V> valueType) {
+    public mapping(Class<K> keyType, Class<V> valueType) {
         this.slot = Storable.NO_SLOT;
         this.cache = new HashMap<>();
         this.keyType = keyType;
         this.valueType = valueType;
-        this.isNestedMapping = Mapping.class.isAssignableFrom(valueType);
+        this.isNestedMapping = mapping.class.isAssignableFrom(valueType);
     }
 
     @Override
@@ -232,11 +232,11 @@ public class Mapping<K extends Storable, V extends Storable> implements java.io.
      * @return A new nested mapping instance
      * @throws IllegalStateException if the value type is not a Mapping
      */
-    public Mapping<K, V> createNestedMapping() {
+    public mapping<K, V> createNestedMapping() {
         if (!isNestedMapping) {
             throw new IllegalStateException("Value type is not a Mapping");
         }
-        return new Mapping<>(keyType, valueType);
+        return new mapping<>(keyType, valueType);
     }
 
     /**

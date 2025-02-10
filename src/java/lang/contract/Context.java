@@ -1,7 +1,7 @@
 package java.lang.contract;
 
-import java.lang.Address;
-import java.lang.UInt256;
+import java.lang.address;   
+import java.lang.uint256;
 
 // SPDX-License-Identifier: MIT
 
@@ -20,7 +20,7 @@ public abstract class Context {
     protected final Storage storage = Storage.getStorage();
 
     // Returns the sender of the transaction.
-    protected final Address _msgSender() {
+    protected final address _msgSender() {
         return msg.sender;
     }
 
@@ -30,7 +30,7 @@ public abstract class Context {
     }
 
     // Returns the length of the context suffix.
-    protected final UInt256 _contextSuffixLength() {
-        return UInt256.ZERO;
+    protected final uint256 _contextSuffixLength() {
+        return uint256.ZERO;
     }
 }

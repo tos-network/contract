@@ -1,22 +1,22 @@
 package java.lang;
 
-import java.lang.bytes.Type;
+import java.lang.types.Type;
 
 /** Boolean type. */
-public class Bool implements Type<Boolean> {
+public class bool implements Type<Boolean> {
 
     public static final String TYPE_NAME = "bool";
-    public static final Bool DEFAULT = new Bool(false);
-    public static final Bool TRUE = new Bool(true);
-    public static final Bool FALSE = new Bool(false);
+    public static final bool DEFAULT = new bool(false);
+    public static final bool TRUE = new bool(true);
+    public static final bool FALSE = new bool(false);
 
     private boolean value;
 
-    public Bool(boolean value) {
+    public bool(boolean value) {
         this.value = value;
     }
 
-    public Bool(Boolean value) {
+    public bool(Boolean value) {
         this.value = value;
     }
 
@@ -39,9 +39,9 @@ public class Bool implements Type<Boolean> {
             return false;
         }
 
-        Bool bool = (Bool) o;
+        bool b = (bool) o;
 
-        return value == bool.value;
+        return value == b.value;
     }
 
     @Override

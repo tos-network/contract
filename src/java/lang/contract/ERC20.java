@@ -1,13 +1,13 @@
 package java.lang.contract;
 
-import java.lang.Address;
-import java.lang.Mapping;
+import java.lang.address;
+import java.lang.mapping;
 import java.lang.Override;
-import java.lang.String;
-import java.lang.UInt256;
-import java.lang.UInt8;
+import java.lang.string;
+import java.lang.uint256;
+import java.lang.uint8;
 import java.lang.annotation.View;
-import static java.lang.Bool.TRUE;
+import static java.lang.bool.TRUE;
 import java.lang.annotation.Payable;
 import java.lang.annotation.Pragma;
 
@@ -31,29 +31,29 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
     /**
      * Mapping of address to balance
      */
-    private final Mapping<Address, UInt256> balances =
-         Mapping.of(Address.class, UInt256.class);
+    private final mapping<address, uint256> balances =
+         mapping.of(address.class, uint256.class);
  
     /**
      * Mapping of address to allowance
      */
-    private final Mapping<Address, Mapping<Address, UInt256>> allowances = 
-        Mapping.ofNested(Address.class, UInt256.class);  
+    private final mapping<address, mapping<address, uint256>> allowances = 
+        mapping.ofNested(address.class, uint256.class);  
  
     /**
      * Total supply of the token
      */ 
-    private UInt256 totalSupply = UInt256.ZERO;
+    private uint256 totalSupply = uint256.ZERO;
 
     /**
      * Name of the token
      */
-    private final String name;
+    private final string name;
 
     /**
      * Symbol of the token
      */
-    private final String symbol;
+    private final string symbol;
 
     /**
      * @dev Sets the values for {name} and {symbol}.
@@ -61,7 +61,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      * All two of these values are immutable: they can only be set once during
      * construction.
      */
-    public ERC20(String name_, String symbol_) {
+    public ERC20(string name_, string symbol_) {
         this.name = name_;
         this.symbol = symbol_;
     }
@@ -71,7 +71,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @View
     @Override
-    public String name() {
+    public string name() {
         return name;
     }
 
@@ -80,7 +80,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @View
     @Override
-    public String symbol() {
+    public string symbol() {
         return symbol;
     }
 
@@ -95,8 +95,8 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @View
     @Override
-    public UInt8 decimals() {
-        return new UInt8(18);
+    public uint8 decimals() {
+        return new uint8(18);
     }
 
     /**
@@ -104,7 +104,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @View
     @Override
-    public UInt256 totalSupply() {
+    public uint256 totalSupply() {
         return totalSupply;
     }
 
@@ -113,7 +113,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @View
     @Override
-    public UInt256 balanceOf(Address account) {
+    public uint256 balanceOf(address account) {
         return balances.get(account);
     }
 
@@ -122,8 +122,8 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @Payable
     @Override
-    public Bool transfer(Address to, UInt256 value) {
-        Address owner = _msgSender();
+    public bool transfer(address to, uint256 value) {
+        address owner = _msgSender();
         _transfer(owner, to, value);
         return TRUE;
     }
@@ -135,7 +135,7 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @View
     @Override
-    public UInt256 allowance(Address owner, Address spender) {
+    public uint256 allowance(address owner, address spender) {
         return allowances.get(owner).get(spender);
     }
 
@@ -144,8 +144,8 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @Payable
     @Override
-    public Bool approve(Address spender, UInt256 value) {
-        Address owner = _msgSender();
+    public bool approve(address spender, uint256 value) {
+        address owner = _msgSender();
         _approve(owner, spender, value);
         return TRUE;
     }
@@ -158,8 +158,8 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      */
     @Payable
     @Override
-    public Bool transferFrom(Address from, Address to, UInt256 value) {
-        Address spender = _msgSender();
+    public bool transferFrom(address from, address to, uint256 value) {
+        address spender = _msgSender();
         _spendAllowance(from, spender, value);
         _transfer(from, to, value);
         return TRUE;
@@ -173,12 +173,12 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      *
      * Emits a {Transfer} event.
      */
-    private void _transfer(Address from, Address to, UInt256 value) {
-        if (Address.ZERO_ADDRESS.equals(from)) {
-            revert(new ERC20InvalidSender(Address.ZERO_ADDRESS));
+    private void _transfer(address from, address to, uint256 value) {
+        if (address.ZERO_ADDRESS.equals(from)) {
+            revert(new ERC20InvalidSender(address.ZERO_ADDRESS));
         }
-        if (Address.ZERO_ADDRESS.equals(to)) {
-            revert(new ERC20InvalidReceiver(Address.ZERO_ADDRESS));
+        if (address.ZERO_ADDRESS.equals(to)) {
+            revert(new ERC20InvalidReceiver(address.ZERO_ADDRESS));
         }
         if (from.equals(to)) {
             return; // No need to transfer to self
@@ -196,23 +196,23 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      *
      * Emits a {Transfer} event.
      */
-    protected void _update(Address from, Address to, UInt256 value) {
-        if (Address.ZERO_ADDRESS.equals(from)) {
+    protected void _update(address from, address to, uint256 value) {
+        if (address.ZERO_ADDRESS.equals(from)) {
             // Minting tokens
             totalSupply = totalSupply.add(value);
         } else {
-            UInt256 fromBalance = balanceOf(from);
+            uint256 fromBalance = balanceOf(from);
             if (fromBalance.compareTo(value) < 0) {
                 revert(new ERC20InsufficientBalance(from, fromBalance, value));
             }
             balances.set(fromBalance.subtract(value), from);
         }
 
-        if (Address.ZERO_ADDRESS.equals(to)) {
+        if (address.ZERO_ADDRESS.equals(to)) {
             // Burning tokens
             totalSupply = totalSupply.subtract(value);
         } else {
-            UInt256 toBalance = balanceOf(to);
+            uint256 toBalance = balanceOf(to);
             balances.set(toBalance.add(value), to);
         }
 
@@ -224,14 +224,14 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      *
      * Emits a {Transfer} event with `from` set to the zero address.
      */
-    protected void _mint(Address account, UInt256 value) {
-        if (Address.ZERO_ADDRESS.equals(account)) {
-            revert(new ERC20InvalidReceiver(Address.ZERO_ADDRESS));
+    protected void _mint(address account, uint256 value) {
+        if (address.ZERO_ADDRESS.equals(account)) {
+            revert(new ERC20InvalidReceiver(address.ZERO_ADDRESS));
         }
         if (value.isZero()) {
             return; // No need to mint zero tokens
         }
-        _update(Address.ZERO_ADDRESS, account, value);
+        _update(address.ZERO_ADDRESS, account, value);
     }
 
     /**
@@ -239,35 +239,35 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      *
      * Emits a {Transfer} event with `to` set to the zero address.
      */
-    protected void _burn(Address account, UInt256 value) {
-        if (Address.ZERO_ADDRESS.equals(account)) {
-            revert(new ERC20InvalidSender(Address.ZERO_ADDRESS));
+    protected void _burn(address account, uint256 value) {
+        if (address.ZERO_ADDRESS.equals(account)) {
+            revert(new ERC20InvalidSender(address.ZERO_ADDRESS));
         }
         if (value.isZero()) {
             return; // No need to burn zero tokens
         }
-        _update(account, Address.ZERO_ADDRESS, value);
+        _update(account, address.ZERO_ADDRESS, value);
     }
 
     /**
      * @dev Sets `value` as the allowance of `spender` over the caller's tokens.
      */
-    protected void _approve(Address owner, Address spender, UInt256 value) {
+    protected void _approve(address owner, address spender, uint256 value) {
         _approve(owner, spender, value, true);
     }
 
     /**
      * @dev Variant of {_approve} with an optional flag to enable or disable the {Approval} event.
      */
-    protected void _approve(Address owner, Address spender, UInt256 value, boolean emitEvent) {
-        if (Address.ZERO_ADDRESS.equals(owner)) {
-            revert(new ERC20InvalidApprover(Address.ZERO_ADDRESS));
+    protected void _approve(address owner, address spender, uint256 value, boolean emitEvent) {
+        if (address.ZERO_ADDRESS.equals(owner)) {
+            revert(new ERC20InvalidApprover(address.ZERO_ADDRESS));
         }
-        if (Address.ZERO_ADDRESS.equals(spender)) {
-            revert(new ERC20InvalidSpender(Address.ZERO_ADDRESS));
+        if (address.ZERO_ADDRESS.equals(spender)) {
+            revert(new ERC20InvalidSpender(address.ZERO_ADDRESS));
         }
 
-        Mapping<Address, UInt256> ownerAllowances = allowances.get(owner);
+        mapping<address, uint256> ownerAllowances = allowances.get(owner);
         ownerAllowances.set(value, spender);
         allowances.set(ownerAllowances, owner);
 
@@ -282,9 +282,9 @@ public abstract class ERC20 extends Contract implements IERC20Errors, IERC20Meta
      * Does not update the allowance value in case of infinite allowance.
      * Revert if not enough allowance is available.
      */
-    protected void _spendAllowance(Address owner, Address spender, UInt256 value) {
-        UInt256 currentAllowance = allowance(owner, spender);
-        if (currentAllowance.compareTo(UInt256.MAX_VALUE) < 0) {
+    protected void _spendAllowance(address owner, address spender, uint256 value) {
+        uint256 currentAllowance = allowance(owner, spender);
+        if (currentAllowance.compareTo(uint256.MAX_VALUE) < 0) {
             if (currentAllowance.compareTo(value) < 0) {
                 revert(new ERC20InsufficientAllowance(spender, currentAllowance, value));
             }
