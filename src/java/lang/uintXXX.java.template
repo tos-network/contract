@@ -1,0 +1,59 @@
+package java.lang;
+
+import java.math.BigInteger;
+import java.lang.types.Arrays;
+
+/**
+ * Represents an unsigned integer less than 2^__BITS__.
+ *
+ */
+public final class __CLASSNAME__ extends uintType<__CLASSNAME__> {
+
+    /**
+     * Number of bits for this type: __BITS__.
+     */
+    private static final int BITS = __BITS__;
+
+    /**
+     * Number of 32-bit words needed: __MAXWIDTH__.
+     */
+    private static final int MAX_WIDTH = __MAXWIDTH__;
+
+    public static int bitSize() {
+        return BITS;
+    }
+
+    /**
+     * The maximum representable value of __CLASSNAME__ (2^__BITS__ - 1).
+     */
+    public static final __CLASSNAME__ MAX_VALUE =
+        new __CLASSNAME__(Arrays.maxValue(MAX_WIDTH));
+
+    public static final __CLASSNAME__ ZERO = new __CLASSNAME__(Arrays.ZERO);
+    public static final __CLASSNAME__ ONE  = new __CLASSNAME__(Arrays.ONE);
+    public static final __CLASSNAME__ TWO  = new __CLASSNAME__(Arrays.TWO);
+
+    // Constructors...
+    public __CLASSNAME__(int[] ints)              { super(ints);           }
+    public __CLASSNAME__(byte[] bytes)            { super(bytes, MAX_VALUE);}
+    public __CLASSNAME__(String s)                { super(s, 10);          }
+    public __CLASSNAME__(String s, int radix)     { super(s, radix);       }
+    public __CLASSNAME__(long v)                  { super(v);              }
+    public __CLASSNAME__(BigInteger b)            { super(b);              }
+    public __CLASSNAME__(uintType<?> other)       { super(other);          }
+
+    @Override
+    public __CLASSNAME__ getMaxValue() {
+        return MAX_VALUE;
+    }
+
+    @Override
+    protected int getMaxWidth() {
+        return MAX_WIDTH;
+    }
+
+    @Override
+    protected __CLASSNAME__ newInstance(int[] ints) {
+        return new __CLASSNAME__(ints);
+    }
+}
