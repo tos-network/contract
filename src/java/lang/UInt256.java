@@ -12,12 +12,12 @@ public final class uint256 extends uintType<uint256> {
     /**
      * Number of bits for this type: 256.
      */
-    private static final int BITS = 256;
+    public static final int BITS = 256;
 
     /**
      * Number of 32-bit words needed: 8.
      */
-    private static final int MAX_WIDTH = 8;
+    public static final int MAX_WIDTH = 8;
 
     public static int bitSize() {
         return BITS;
