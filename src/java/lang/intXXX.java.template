@@ -1,0 +1,63 @@
+package java.lang;
+
+import java.math.BigInteger;
+
+public final class __CLASSNAME__ extends intType<__CLASSNAME__> {
+    public static final int MAX_WIDTH = __MAXWIDTH__; // __BITS__ bits = __MAXWIDTH__ * 32
+    /**
+     * Number of bits for this type: __BITS__.
+     */
+    public static final int BITS = __BITS__;
+    
+    /**
+     * The maximum value for __CLASSNAME__ (2^(__BITS__-1) - 1)
+     */
+    public static final __CLASSNAME__ MAX_VALUE = 
+        new __CLASSNAME__(BigInteger.valueOf(2).pow(__BITS__ - 1).subtract(BigInteger.ONE));
+    
+    /**
+     * The minimum value for __CLASSNAME__ (-2^(__BITS__-1))
+     */
+    public static final __CLASSNAME__ MIN_VALUE = 
+        new __CLASSNAME__(BigInteger.valueOf(2).pow(__BITS__ - 1).negate());
+    
+    /**
+     * Common constants
+     */
+    public static final __CLASSNAME__ ZERO = new __CLASSNAME__(0);
+    public static final __CLASSNAME__ ONE = new __CLASSNAME__(1);
+    public static final __CLASSNAME__ MINUS_ONE = new __CLASSNAME__(-1);
+    
+    @Override
+    public int bitSize() {
+        return BITS;
+    }
+    
+    @Override
+    protected int getMaxWidth() {
+        return MAX_WIDTH;
+    }
+    
+    @Override
+    public __CLASSNAME__ getMaxValue() {
+        return MAX_VALUE;
+    }
+    
+    @Override
+    public __CLASSNAME__ getMinValue() {
+        return MIN_VALUE;
+    }
+    
+    @Override
+    protected __CLASSNAME__ newInstance(BigInteger value) {
+        return new __CLASSNAME__(value);
+    }
+    
+    // Constructors
+    public __CLASSNAME__(long l) { super(l); }
+    public __CLASSNAME__(int[] ints) { super(ints); }
+    public __CLASSNAME__(BigInteger b) { super(b); }
+    public __CLASSNAME__(String s) { super(s, DEFAULT_RADIX); }
+    public __CLASSNAME__(String s, int radix) { super(s, radix); }
+    public __CLASSNAME__(byte[] bytes) { super(bytes, MAX_VALUE, MIN_VALUE); }
+}
