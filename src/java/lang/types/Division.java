@@ -1,5 +1,7 @@
 package java.lang.types;
 
+import static java.lang.types.Arrays.LONG;
+
 final class Division {
   private static long LONG = 0xffffffffL;
 
@@ -67,6 +69,34 @@ final class Division {
     return new int[][]{quo, rem};
   }
 
+  static int[][] div4int(final int[] a, long b) {
+    final int  alen = a.length;
+    final int[] quo = new int[alen - 1], rem = new int[alen + 1];
+
+    System.arraycopy(a, 0, rem, 1, alen);
+
+    final int places = Long.numberOfLeadingZeros(b);
+    if(0 < places) {
+      lshunt(rem, places);
+      b <<= places;
+    }
+
+    final int   dh = (int)(b >>> 32);
+    final long dhl = dh & LONG;
+    final int   dl = (int)(b & LONG);
+
+    int qhat;
+    for(int i = 0; i < alen - 1; i++)
+      if((qhat = D3(i, rem, dh, dhl, dl)) != 0)
+        quo[i] = D4_D5(i, rem, dh, dl, qhat);
+
+    if(0 < places)
+      rshift(rem, places);
+
+    return new int[][]{quo, rem};
+  }
+
+
   static int[][] div(final int[] a, final int[] b) {
     final int places = Integer.numberOfLeadingZeros(b[0]);
     final int[] div, rem;
@@ -104,6 +134,59 @@ final class Division {
       if((qhat = D3(i, rem, dh, dhl, dl)) != 0)
         quo[i] = D4_D5(i, rem, div, qhat);
 
+    if(0 < places)
+      rshift(rem, places);
+
+    return new int[][]{quo, rem};
+  }
+
+  static int[][] div5int(final int[] a, final int[] b) {
+    // Check input parameters
+    if (a == null || b == null || b.length == 0 || (b.length == 1 && b[0] == 0)) {
+      throw new ArithmeticException("Division by zero or invalid input");
+    }
+
+    // Calculate leading zeros using absolute value to handle negative numbers
+    final int places = Integer.numberOfLeadingZeros(Math.abs(b[0]));
+    final int[] div, rem;
+
+    if(0 < places) {
+      div = new int[b.length];
+      copyshift(b, 0, div, 0, places);
+
+      // Handle remainder array size based on leading zeros comparison
+      if(places <= Integer.numberOfLeadingZeros(Math.abs(a[0]))) {
+        rem = new int[a.length + 1];
+        copyshift(a, 0, rem, 1, places);
+      } else {
+        rem            = new int[a.length + 2];
+        final int invp = 32 - places;
+        int c          = 0;
+        for(int i = 0; i < a.length; i++)
+          rem[i + 1] = (c << places) | ((c = a[i]) >>> invp);
+        rem[a.length + 1] = c << places;
+      }
+    } else {
+      div = b;
+      rem = new int[a.length + 1];
+      System.arraycopy(a, 0, rem, 1, a.length);
+    }
+
+    // Ensure quotient array size is non-negative
+    final int   qints = Math.max(0, rem.length - b.length);
+    final int[] quo   = new int[qints];
+
+    final int  dh  = div[0];
+    final int  dl  = div[1];
+    final long dhl = dh & LONG;
+
+    // Calculate quotient digits
+    int qhat;
+    for(int i = 0; i < qints; i++)
+      if((qhat = D3(i, rem, dh, dhl, dl)) != 0)
+        quo[i] = D4_D5(i, rem, div, qhat);
+
+    // Apply right shift if necessary
     if(0 < places)
       rshift(rem, places);
 
@@ -281,5 +364,40 @@ final class Division {
     for(int i = 0; i < src.length - 1; i++)
       dst[dsti + i] = (carry << places) | ((carry = src[++srci]) >>> invplaces);
     dst[dsti + src.length - 1] = carry << places;
+  }
+
+  /**
+   * Divides two signed integers
+   */
+  public static int[][] div4int(int[] a, int[] b) {
+    if (b.length == 0 || (b.length == 1 && b[0] == 0)) {
+      throw new ArithmeticException("Division by zero");
+    }
+
+    // Handle signs
+    boolean negativeResult = (Arrays.isNegative(a) != Arrays.isNegative(b));
+    
+    // Get absolute values
+    int[] absA = Arrays.isNegative(a) ? Arrays.negate(a) : a;
+    int[] absB = Arrays.isNegative(b) ? Arrays.negate(b) : b;
+    
+    // Special case for single-element arrays
+    if (absB.length == 1) {
+      int[][] result = div(absA, absB[0] & LONG);
+      if (negativeResult && result[0].length > 0) {
+        result[0] = Arrays.negate(result[0]);
+      }
+      return result;
+    }
+    
+    // use unsigned division
+    int[][] result = div5int(absA, absB);
+    
+    // Apply sign to quotient if needed
+    if (negativeResult && result[0].length > 0) {
+      result[0] = Arrays.negate(result[0]);
+    }
+    
+    return result;
   }
 }

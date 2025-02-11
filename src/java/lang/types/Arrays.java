@@ -267,6 +267,39 @@ public final class Arrays {
     return out;
   }
 
+      /**
+     * Arithmetic right shift
+     */
+    public static int[] rshift(int[] ints, int n) {
+      if (n == 0 || ints.length == 0) return ints;
+      
+      int words = n >>> 5;
+      n &= 31;
+      
+      if (words >= ints.length) {
+          return isNegative(ints) ? new int[]{-1} : ZERO;
+      }
+      
+      int[] result = new int[ints.length - words];
+      System.arraycopy(ints, 0, result, 0, result.length);
+      
+      if (n != 0) {
+          for (int i = result.length - 1; i > 0; i--) {
+              result[i] = (result[i] >>> n) | (result[i-1] << (32-n));
+          }
+          result[0] = result[0] >> n; // arithmetic shift for sign
+      }
+      
+      return result;
+  }
+
+  /**
+   * Returns true if the number is negative (sign bit is set)
+   */
+  public static boolean isNegative(int[] ints) {
+      return ints.length > 0 && ints[0] < 0;
+  }
+
   public static int[] inc(final int[] a, final int maxWidth) {
     return inc(a, false, maxWidth);
   }
@@ -360,6 +393,29 @@ public final class Arrays {
         ;
 
     return out[0] == 0 ? stripLeadingZeroes(out, 1) : out;
+  }
+  
+  public static int[] sub4int(final int[] a, final int[] b) {
+    if (b.length == 0) return a;
+    if (a.length == 0) return negate(b);
+    
+    int[] result = new int[Math.max(a.length, b.length)];
+    long borrow = 0;
+    
+    // Start from least significant word
+    for (int i = 0; i < result.length; i++) {
+        int ai = a.length - 1 - i;
+        int bi = b.length - 1 - i;
+        
+        long aVal = ai >= 0 ? a[ai] & LONG : 0;
+        long bVal = bi >= 0 ? b[bi] & LONG : 0;
+        
+        long diff = aVal - bVal - borrow;
+        result[result.length - 1 - i] = (int)diff;
+        borrow = (diff >> 32) & 1;
+    }
+    
+    return stripLeadingZeroes(result);
   }
 
   public static int[] mulmod(int[] a, int[] b, final int[] c) {
@@ -627,6 +683,31 @@ public final class Arrays {
     return q[0] == 0 ? stripLeadingZeroes(q) : q;
   }
 
+
+  public static int[] divide4int(final int[] a, final int[] b) {
+    if (b.length == 0 || (b.length == 1 && b[0] == 0)) {
+        throw new ArithmeticException("Division by zero");
+    }
+    if (a.length == 0) {
+        return ZERO;
+    }
+
+    final int[] q;
+    switch(b.length) {
+    case 1:
+        q = Division.div4int(a, b)[0];
+        break;
+    case 2:
+        final long divisor = ((b[0] & LONG) << 32) | (b[1] & LONG);
+        q = Division.div4int(a, new int[]{(int)(divisor >>> 32), (int)divisor})[0];
+        break;
+    default:
+        q = Division.div4int(a, b)[0];
+    }
+
+    return q.length == 0 || q[0] == 0 ? stripLeadingZeroes(q) : q;
+  }
+
   public static int[] mod(final int[] a, final int[] b) {
     final int[] r;
 
@@ -717,5 +798,57 @@ public final class Arrays {
     final int[] max = new int[maxWidth];
     java.util.Arrays.fill(max, -1);
     return max;
+  }
+
+  /**
+   * Sign extends an array to the specified width
+   */
+  public static int[] signExtend(int[] ints, int width) {
+    if (ints.length >= width) return ints;
+    
+    int[] result = new int[width];
+    System.arraycopy(ints, 0, result, width - ints.length, ints.length);
+    
+    // If original number was negative, fill with -1
+    if (ints.length > 0 && ints[0] < 0) {
+      java.util.Arrays.fill(result, 0, width - ints.length, -1);
+    }
+    
+    return result;
+  }
+
+  /**
+   * Negates a two's complement number
+   */
+  public static int[] negate(int[] ints) {
+    int[] result = new int[ints.length];
+    long carry = 1;
+    
+    for (int i = ints.length - 1; i >= 0; i--) {
+      long sum = (~ints[i] & LONG) + carry;
+      result[i] = (int)sum;
+      carry = sum >>> 32;
+    }
+    
+    return result;
+  }
+
+  /**
+   * Returns the maximum signed value array for the given width
+   */
+  public static int[] maxSignedValue(final int maxWidth) {
+    final int[] max = new int[maxWidth];
+    java.util.Arrays.fill(max, -1);
+    max[0] = 0x7fffffff;  // Set highest bit to 0
+    return max;
+  }
+
+  /**
+   * Returns the minimum signed value array for the given width
+   */
+  public static int[] minSignedValue(final int maxWidth) {
+    final int[] min = new int[maxWidth];
+    min[0] = 0x80000000;  // Set only highest bit to 1
+    return min;
   }
 }
