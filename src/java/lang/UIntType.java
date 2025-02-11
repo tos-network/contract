@@ -692,4 +692,15 @@ public abstract class uintType<T extends uintType<T>>
     this.ints = array;
     return true;
   }
+
+  /**
+   * Returns true if the bit at position n is set
+   */
+  public boolean testBit(int n) {
+    if (n < 0) {
+      throw new ArithmeticException("Negative bit address");
+    }
+    int wordIndex = ints.length - 1 - (n >>> 5);
+    return wordIndex >= 0 && (ints[wordIndex] & (1 << (n & 31))) != 0;
+  }
 }

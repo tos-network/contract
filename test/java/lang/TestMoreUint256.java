@@ -105,6 +105,16 @@ public class TestMoreUint256 {
         }
 
         testRandomArithmetic();
+        testValueConversions();
+        testComparisons();
+        testBitOperations();
+
+        // Add new edge case tests
+        testStringEdgeCases();
+        testPowOperations();
+        testExactValueExceptions();
+        testDivModZero();
+        testSpecialCases();
     }
 
     /**
@@ -404,5 +414,151 @@ public class TestMoreUint256 {
             uint256 subVal = ux.subtract(uy);
             check(subVal.toBigInteger().equals(subRef), "random sub => match");
         }
+    }
+
+    private static void testValueConversions() {
+        System.out.println("Running testValueConversions...");
+        // Test exact value conversions
+        check(fromInt(100).intValueExact() == 100, "intValueExact");
+        check(fromInt(100).longValueExact() == 100L, "longValueExact");
+        // Add more conversion tests...
+    }
+
+    private static void testComparisons() {
+        System.out.println("Running testComparisons...");
+        check(one.compareTo(zero) > 0, "one > zero");
+        check(zero.compareTo(one) < 0, "zero < one");
+        check(one.compareTo(one) == 0, "one == one");
+        // Add min/max tests...
+    }
+
+    private static void testBitOperations() {
+        System.out.println("Running testBitOperations...");
+        check(one.testBit(0), "one has bit 0 set");
+        check(!one.testBit(1), "one has bit 1 clear");
+        check(one.setBit(1).equals(fromInt(3)), "setBit(1) on 1 => 3");
+        // Add more bit operation tests...
+    }
+
+    // -------------------------------------------------------
+    // Additional edge case tests
+    // -------------------------------------------------------
+    private static void testStringEdgeCases() {
+        System.out.println("Running testStringEdgeCases...");
+        // Test empty and invalid strings
+        try {
+            new uint256("", 10);
+            check(false, "Empty string should throw NumberFormatException");
+        } catch (NumberFormatException e) {
+            check(true, "Empty string correctly throws");
+        }
+
+        try {
+            new uint256("-1", 10);
+            check(false, "Negative string should throw NumberFormatException");
+        } catch (NumberFormatException e) {
+            check(true, "Negative string correctly throws");
+        }
+
+        // Test valid string with plus sign
+        check(new uint256("+1024", 10).equals(fromInt(1024)), "String with plus sign");
+    }
+
+    private static void testPowOperations() {
+        System.out.println("Running testPowOperations...");
+        // Test basic pow operations
+        check(one.pow(0).equals(one), "1^0 = 1");
+        check(zero.pow(1).equals(zero), "0^1 = 0");
+        check(two.pow(2).equals(fromInt(4)), "2^2 = 4");
+
+        // Test negative exponent
+        try {
+            one.pow(-1);
+            check(false, "Negative exponent should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            check(true, "Negative exponent correctly throws");
+        }
+    }
+
+    private static void testExactValueExceptions() {
+        System.out.println("Running testExactValueExceptions...");
+        // Test exact value conversion exceptions
+        uint256 large = max;
+        
+        try {
+            large.intValueExact();
+            check(false, "Large value should throw ArithmeticException for intValueExact");
+        } catch (ArithmeticException e) {
+            check(true, "Large value correctly throws for intValueExact");
+        }
+
+        try {
+            large.longValueExact();
+            check(false, "Large value should throw ArithmeticException for longValueExact");
+        } catch (ArithmeticException e) {
+            check(true, "Large value correctly throws for longValueExact");
+        }
+
+        try {
+            fromInt(Short.MAX_VALUE + 1).shortValueExact();
+            check(false, "Value > Short.MAX_VALUE should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            check(true, "Value > Short.MAX_VALUE correctly throws");
+        }
+
+        try {
+            fromInt(Byte.MAX_VALUE + 1).byteValueExact();
+            check(false, "Value > Byte.MAX_VALUE should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            check(true, "Value > Byte.MAX_VALUE correctly throws");
+        }
+    }
+
+    private static void testDivModZero() {
+        System.out.println("Running testDivModZero...");
+        // Test division by zero
+        try {
+            one.divide(zero);
+            check(false, "Division by zero should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            check(true, "Division by zero correctly throws");
+        }
+
+        try {
+            one.mod(zero);
+            check(false, "Mod by zero should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            check(true, "Mod by zero correctly throws");
+        }
+
+        try {
+            one.divmod(zero);
+            check(false, "Divmod by zero should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            check(true, "Divmod by zero correctly throws");
+        }
+    }
+
+    private static void testSpecialCases() {
+        System.out.println("Running testSpecialCases...");
+        
+        // Test operations with max value
+        check(max.add(one).equals(zero), "max + 1 = 0 (overflow)");
+        check(zero.subtract(one).equals(max), "0 - 1 = max (underflow)");
+        
+        // Test operations with powers of 2
+        uint256 pow2_255 = one.shiftLeft(255);
+        check(pow2_255.testBit(255), "2^255 has bit 255 set");
+        check(!pow2_255.testBit(254), "2^255 has bit 254 clear");
+        
+        // Test byte array conversion edge cases
+        byte[] zeroBytes = zero.toByteArray();
+        // For zero, the byte array might be empty or contain a single zero byte
+        check(zeroBytes != null, "zero toByteArray not null");
+        
+        // Test max value byte array
+        byte[] maxBytes = max.toByteArray();
+        check(maxBytes.length == 32, "max value should be 32 bytes");
+        check((maxBytes[0] & 0xFF) == 0xFF, "max value first byte should be 0xFF");
     }
 }
