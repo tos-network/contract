@@ -26,6 +26,10 @@ classpath-sources := $(shell find $(classpath-src) -name '*.java')
 classpath-classes = $(call java-classes,$(classpath-sources),$(classpath-src),$(classpath-build))
 classpath-dep = $(classpath-build).dep
 
+# Python settings
+PYTHON = python3
+TEST_SCRIPT = run_tests.py
+
 # Default target
 .PHONY: build
 build: $(classpath-dep) $(build)/tl.jar
@@ -47,8 +51,18 @@ $(build)/tl.jar: $(classpath-dep)
 	(cd $(classpath-build) && \
 	 $(jar) c0f "../tl.jar" .)
 
+# Test target
+.PHONY: test
+test: build
+	@echo "running tests"
+	$(PYTHON) $(TEST_SCRIPT)
+
 # Clean target
 .PHONY: clean
 clean:
 	@echo "removing build directory"
 	rm -rf $(build)
+
+# Clean and test
+.PHONY: clean-test
+clean-test: clean test
