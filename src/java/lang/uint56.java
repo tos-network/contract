@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^56.
@@ -27,11 +27,11 @@ public final class uint56 extends uintType<uint56> {
      * The maximum representable value of uint56 (2^56 - 1).
      */
     public static final uint56 MAX_VALUE =
-        new uint56(Arrays.maxValue(MAX_WIDTH));
+        new uint56(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint56 ZERO = new uint56(Arrays.ZERO);
-    public static final uint56 ONE  = new uint56(Arrays.ONE);
-    public static final uint56 TWO  = new uint56(Arrays.TWO);
+    public static final uint56 ZERO = new uint56(BytesArray.ZERO);
+    public static final uint56 ONE  = new uint56(BytesArray.ONE);
+    public static final uint56 TWO  = new uint56(BytesArray.TWO);
 
     // Constructors...
     public uint56(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint56 extends uintType<uint56> {
     public uint56(long v)                  { super(v);              }
     public uint56(BigInteger b)            { super(b);              }
     public uint56(uintType<?> other)       { super(other);          }
+
+    public static uint56 valueOf(byte[] value) {
+        return new uint56(value);
+    }
 
     @Override
     public uint56 getMaxValue() {

@@ -27,6 +27,10 @@ public final class int40 extends intType<int40> {
     public static final int40 ZERO = new int40(0);
     public static final int40 ONE = new int40(1);
     public static final int40 MINUS_ONE = new int40(-1);
+
+    public static int40 valueOf(byte[] value) {
+        return new int40(value);
+    }
     
     @Override
     public int bitSize() {

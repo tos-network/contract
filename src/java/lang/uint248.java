@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^248.
@@ -27,11 +27,11 @@ public final class uint248 extends uintType<uint248> {
      * The maximum representable value of uint248 (2^248 - 1).
      */
     public static final uint248 MAX_VALUE =
-        new uint248(Arrays.maxValue(MAX_WIDTH));
+        new uint248(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint248 ZERO = new uint248(Arrays.ZERO);
-    public static final uint248 ONE  = new uint248(Arrays.ONE);
-    public static final uint248 TWO  = new uint248(Arrays.TWO);
+    public static final uint248 ZERO = new uint248(BytesArray.ZERO);
+    public static final uint248 ONE  = new uint248(BytesArray.ONE);
+    public static final uint248 TWO  = new uint248(BytesArray.TWO);
 
     // Constructors...
     public uint248(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint248 extends uintType<uint248> {
     public uint248(long v)                  { super(v);              }
     public uint248(BigInteger b)            { super(b);              }
     public uint248(uintType<?> other)       { super(other);          }
+
+    public static uint248 valueOf(byte[] value) {
+        return new uint248(value);
+    }
 
     @Override
     public uint248 getMaxValue() {

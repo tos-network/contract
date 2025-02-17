@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^8.
@@ -27,11 +27,11 @@ public final class uint8 extends uintType<uint8> {
      * The maximum representable value of uint8 (2^8 - 1).
      */
     public static final uint8 MAX_VALUE =
-        new uint8(Arrays.maxValue(MAX_WIDTH));
+        new uint8(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint8 ZERO = new uint8(Arrays.ZERO);
-    public static final uint8 ONE  = new uint8(Arrays.ONE);
-    public static final uint8 TWO  = new uint8(Arrays.TWO);
+    public static final uint8 ZERO = new uint8(BytesArray.ZERO);
+    public static final uint8 ONE  = new uint8(BytesArray.ONE);
+    public static final uint8 TWO  = new uint8(BytesArray.TWO);
 
     // Constructors...
     public uint8(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint8 extends uintType<uint8> {
     public uint8(long v)                  { super(v);              }
     public uint8(BigInteger b)            { super(b);              }
     public uint8(uintType<?> other)       { super(other);          }
+
+    public static uint8 valueOf(byte[] value) {
+        return new uint8(value);
+    }
 
     @Override
     public uint8 getMaxValue() {

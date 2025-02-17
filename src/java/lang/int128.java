@@ -27,6 +27,10 @@ public final class int128 extends intType<int128> {
     public static final int128 ZERO = new int128(0);
     public static final int128 ONE = new int128(1);
     public static final int128 MINUS_ONE = new int128(-1);
+
+    public static int128 valueOf(byte[] value) {
+        return new int128(value);
+    }
     
     @Override
     public int bitSize() {

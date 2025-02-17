@@ -27,6 +27,10 @@ public final class int104 extends intType<int104> {
     public static final int104 ZERO = new int104(0);
     public static final int104 ONE = new int104(1);
     public static final int104 MINUS_ONE = new int104(-1);
+
+    public static int104 valueOf(byte[] value) {
+        return new int104(value);
+    }
     
     @Override
     public int bitSize() {

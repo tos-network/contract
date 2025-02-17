@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^32.
@@ -27,11 +27,11 @@ public final class uint32 extends uintType<uint32> {
      * The maximum representable value of uint32 (2^32 - 1).
      */
     public static final uint32 MAX_VALUE =
-        new uint32(Arrays.maxValue(MAX_WIDTH));
+        new uint32(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint32 ZERO = new uint32(Arrays.ZERO);
-    public static final uint32 ONE  = new uint32(Arrays.ONE);
-    public static final uint32 TWO  = new uint32(Arrays.TWO);
+    public static final uint32 ZERO = new uint32(BytesArray.ZERO);
+    public static final uint32 ONE  = new uint32(BytesArray.ONE);
+    public static final uint32 TWO  = new uint32(BytesArray.TWO);
 
     // Constructors...
     public uint32(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint32 extends uintType<uint32> {
     public uint32(long v)                  { super(v);              }
     public uint32(BigInteger b)            { super(b);              }
     public uint32(uintType<?> other)       { super(other);          }
+
+    public static uint32 valueOf(byte[] value) {
+        return new uint32(value);
+    }
 
     @Override
     public uint32 getMaxValue() {

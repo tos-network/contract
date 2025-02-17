@@ -27,6 +27,10 @@ public final class int240 extends intType<int240> {
     public static final int240 ZERO = new int240(0);
     public static final int240 ONE = new int240(1);
     public static final int240 MINUS_ONE = new int240(-1);
+
+    public static int240 valueOf(byte[] value) {
+        return new int240(value);
+    }
     
     @Override
     public int bitSize() {

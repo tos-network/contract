@@ -27,6 +27,10 @@ public final class int216 extends intType<int216> {
     public static final int216 ZERO = new int216(0);
     public static final int216 ONE = new int216(1);
     public static final int216 MINUS_ONE = new int216(-1);
+
+    public static int216 valueOf(byte[] value) {
+        return new int216(value);
+    }
     
     @Override
     public int bitSize() {

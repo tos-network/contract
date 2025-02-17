@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^__BITS__.
@@ -27,11 +27,11 @@ public final class __CLASSNAME__ extends uintType<__CLASSNAME__> {
      * The maximum representable value of __CLASSNAME__ (2^__BITS__ - 1).
      */
     public static final __CLASSNAME__ MAX_VALUE =
-        new __CLASSNAME__(Arrays.maxValue(MAX_WIDTH));
+        new __CLASSNAME__(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final __CLASSNAME__ ZERO = new __CLASSNAME__(Arrays.ZERO);
-    public static final __CLASSNAME__ ONE  = new __CLASSNAME__(Arrays.ONE);
-    public static final __CLASSNAME__ TWO  = new __CLASSNAME__(Arrays.TWO);
+    public static final __CLASSNAME__ ZERO = new __CLASSNAME__(BytesArray.ZERO);
+    public static final __CLASSNAME__ ONE  = new __CLASSNAME__(BytesArray.ONE);
+    public static final __CLASSNAME__ TWO  = new __CLASSNAME__(BytesArray.TWO);
 
     // Constructors...
     public __CLASSNAME__(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class __CLASSNAME__ extends uintType<__CLASSNAME__> {
     public __CLASSNAME__(long v)                  { super(v);              }
     public __CLASSNAME__(BigInteger b)            { super(b);              }
     public __CLASSNAME__(uintType<?> other)       { super(other);          }
+
+    public static __CLASSNAME__ valueOf(byte[] value) {
+        return new __CLASSNAME__(value);
+    }
 
     @Override
     public __CLASSNAME__ getMaxValue() {

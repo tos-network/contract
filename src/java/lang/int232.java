@@ -27,6 +27,10 @@ public final class int232 extends intType<int232> {
     public static final int232 ZERO = new int232(0);
     public static final int232 ONE = new int232(1);
     public static final int232 MINUS_ONE = new int232(-1);
+
+    public static int232 valueOf(byte[] value) {
+        return new int232(value);
+    }
     
     @Override
     public int bitSize() {

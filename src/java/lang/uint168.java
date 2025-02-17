@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^168.
@@ -27,11 +27,11 @@ public final class uint168 extends uintType<uint168> {
      * The maximum representable value of uint168 (2^168 - 1).
      */
     public static final uint168 MAX_VALUE =
-        new uint168(Arrays.maxValue(MAX_WIDTH));
+        new uint168(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint168 ZERO = new uint168(Arrays.ZERO);
-    public static final uint168 ONE  = new uint168(Arrays.ONE);
-    public static final uint168 TWO  = new uint168(Arrays.TWO);
+    public static final uint168 ZERO = new uint168(BytesArray.ZERO);
+    public static final uint168 ONE  = new uint168(BytesArray.ONE);
+    public static final uint168 TWO  = new uint168(BytesArray.TWO);
 
     // Constructors...
     public uint168(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint168 extends uintType<uint168> {
     public uint168(long v)                  { super(v);              }
     public uint168(BigInteger b)            { super(b);              }
     public uint168(uintType<?> other)       { super(other);          }
+
+    public static uint168 valueOf(byte[] value) {
+        return new uint168(value);
+    }
 
     @Override
     public uint168 getMaxValue() {

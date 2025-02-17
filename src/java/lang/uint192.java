@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^192.
@@ -27,11 +27,11 @@ public final class uint192 extends uintType<uint192> {
      * The maximum representable value of uint192 (2^192 - 1).
      */
     public static final uint192 MAX_VALUE =
-        new uint192(Arrays.maxValue(MAX_WIDTH));
+        new uint192(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint192 ZERO = new uint192(Arrays.ZERO);
-    public static final uint192 ONE  = new uint192(Arrays.ONE);
-    public static final uint192 TWO  = new uint192(Arrays.TWO);
+    public static final uint192 ZERO = new uint192(BytesArray.ZERO);
+    public static final uint192 ONE  = new uint192(BytesArray.ONE);
+    public static final uint192 TWO  = new uint192(BytesArray.TWO);
 
     // Constructors...
     public uint192(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint192 extends uintType<uint192> {
     public uint192(long v)                  { super(v);              }
     public uint192(BigInteger b)            { super(b);              }
     public uint192(uintType<?> other)       { super(other);          }
+
+    public static uint192 valueOf(byte[] value) {
+        return new uint192(value);
+    }
 
     @Override
     public uint192 getMaxValue() {

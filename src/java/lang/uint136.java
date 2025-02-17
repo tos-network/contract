@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^136.
@@ -27,11 +27,11 @@ public final class uint136 extends uintType<uint136> {
      * The maximum representable value of uint136 (2^136 - 1).
      */
     public static final uint136 MAX_VALUE =
-        new uint136(Arrays.maxValue(MAX_WIDTH));
+        new uint136(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint136 ZERO = new uint136(Arrays.ZERO);
-    public static final uint136 ONE  = new uint136(Arrays.ONE);
-    public static final uint136 TWO  = new uint136(Arrays.TWO);
+    public static final uint136 ZERO = new uint136(BytesArray.ZERO);
+    public static final uint136 ONE  = new uint136(BytesArray.ONE);
+    public static final uint136 TWO  = new uint136(BytesArray.TWO);
 
     // Constructors...
     public uint136(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint136 extends uintType<uint136> {
     public uint136(long v)                  { super(v);              }
     public uint136(BigInteger b)            { super(b);              }
     public uint136(uintType<?> other)       { super(other);          }
+
+    public static uint136 valueOf(byte[] value) {
+        return new uint136(value);
+    }
 
     @Override
     public uint136 getMaxValue() {

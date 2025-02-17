@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^256.
@@ -27,11 +27,11 @@ public final class uint extends uintType<uint> {
      * The maximum representable value of uint (2^256 - 1).
      */
     public static final uint MAX_VALUE =
-        new uint(Arrays.maxValue(MAX_WIDTH));
+        new uint(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint ZERO = new uint(Arrays.ZERO);
-    public static final uint ONE  = new uint(Arrays.ONE);
-    public static final uint TWO  = new uint(Arrays.TWO);
+    public static final uint ZERO = new uint(BytesArray.ZERO);
+    public static final uint ONE  = new uint(BytesArray.ONE);
+    public static final uint TWO  = new uint(BytesArray.TWO);
 
     // Constructors...
     public uint(int[] ints)              { super(ints);           }

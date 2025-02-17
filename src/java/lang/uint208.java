@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^208.
@@ -27,11 +27,11 @@ public final class uint208 extends uintType<uint208> {
      * The maximum representable value of uint208 (2^208 - 1).
      */
     public static final uint208 MAX_VALUE =
-        new uint208(Arrays.maxValue(MAX_WIDTH));
+        new uint208(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint208 ZERO = new uint208(Arrays.ZERO);
-    public static final uint208 ONE  = new uint208(Arrays.ONE);
-    public static final uint208 TWO  = new uint208(Arrays.TWO);
+    public static final uint208 ZERO = new uint208(BytesArray.ZERO);
+    public static final uint208 ONE  = new uint208(BytesArray.ONE);
+    public static final uint208 TWO  = new uint208(BytesArray.TWO);
 
     // Constructors...
     public uint208(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint208 extends uintType<uint208> {
     public uint208(long v)                  { super(v);              }
     public uint208(BigInteger b)            { super(b);              }
     public uint208(uintType<?> other)       { super(other);          }
+
+    public static uint208 valueOf(byte[] value) {
+        return new uint208(value);
+    }
 
     @Override
     public uint208 getMaxValue() {

@@ -1,10 +1,10 @@
 package java.lang;
 
 import java.math.BigInteger;
-import static java.lang.types.Arrays.LONG;
+import static java.lang.types.BytesArray.LONG;
 import java.io.Storable;
 import java.lang.contract.Storage;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 import java.lang.types.StringUtil;
 
 /**
@@ -65,9 +65,9 @@ public abstract class uintType<T extends uintType<T>>
    * Constructs from a {@code long}, treating it as unsigned.
    */
   protected uintType(final long l) {
-    this.ints = Arrays.valueOf(l);
+    this.ints = BytesArray.valueOf(l);
     // Strip leading zeroes if it exceeds the max width
-    this.ints = Arrays.stripLeadingZeroes(this.ints,
+    this.ints = BytesArray.stripLeadingZeroes(this.ints,
         Math.max(0, this.ints.length - getMaxWidth()));
   }
 
@@ -76,7 +76,7 @@ public abstract class uintType<T extends uintType<T>>
    * Truncates to {@link #getMaxWidth()} if needed and removes leading zeros.
    */
   protected uintType(final int[] ints) {
-    this.ints = Arrays.stripLeadingZeroes(
+    this.ints = BytesArray.stripLeadingZeroes(
         ints, Math.max(0, ints.length - getMaxWidth())
     );
   }
@@ -86,7 +86,7 @@ public abstract class uintType<T extends uintType<T>>
    * used by other constructors to handle truncation.
    */
   protected uintType(final int[] ints, final int maxWidth) {
-    this.ints = Arrays.stripLeadingZeroes(
+    this.ints = BytesArray.stripLeadingZeroes(
         ints, Math.max(0, ints.length - maxWidth)
     );
   }
@@ -105,8 +105,8 @@ public abstract class uintType<T extends uintType<T>>
    */
   protected uintType(final BigInteger b) {
     BigInteger nonNeg = (b.signum() < 0) ? b.negate() : b;
-    // This presupposes you have Arrays.from(BigInteger, int)
-    this.ints = Arrays.from(nonNeg, getMaxWidth());
+    // This presupposes you have BytesArray.from(BigInteger, int)
+    this.ints = BytesArray.from(nonNeg, getMaxWidth());
   }
 
   /**
@@ -119,12 +119,12 @@ public abstract class uintType<T extends uintType<T>>
 
   /**
    * A constructor for byte[] that references a maximum value.
-   * This uses Arrays.from(byte[], maxValue.ints) then truncates if needed.
+   * This uses BytesArray.from(byte[], maxValue.ints) then truncates if needed.
    * Typically called by child classes' constructors that do `super(bytes, MAX_VALUE)`.
    */
   protected uintType(final byte[] bytes, final T maxValue) {
     // Convert from big-endian bytes to an int[] up to maxValue.ints length
-    this(Arrays.from(bytes, maxValue.ints), maxValue.ints.length);
+    this(BytesArray.from(bytes, maxValue.ints), maxValue.ints.length);
   }
 
   /**
@@ -146,22 +146,22 @@ public abstract class uintType<T extends uintType<T>>
   /** {@code ~this} */
   public T not() {
     // effectively: this ^ getMaxValue()
-    return newInstance(Arrays.not(this.ints, getMaxValue().ints));
+    return newInstance(BytesArray.not(this.ints, getMaxValue().ints));
   }
 
   /** {@code this & other} */
   public T and(T other) {
-    return newInstance(Arrays.and(this.ints, other.ints));
+    return newInstance(BytesArray.and(this.ints, other.ints));
   }
 
   /** {@code this | other} */
   public T or(T other) {
-    return newInstance(Arrays.or(this.ints, other.ints));
+    return newInstance(BytesArray.or(this.ints, other.ints));
   }
 
   /** {@code this ^ other} */
   public T xor(T other) {
-    return newInstance(Arrays.xor(this.ints, other.ints));
+    return newInstance(BytesArray.xor(this.ints, other.ints));
   }
 
   /**
@@ -175,7 +175,7 @@ public abstract class uintType<T extends uintType<T>>
     // If bit is beyond the max width, return this unchanged
     return (getMaxWidth() <= (bit >>> 5))
         ? (T) this
-        : newInstance(Arrays.setBit(this.ints, bit));
+        : newInstance(BytesArray.setBit(this.ints, bit));
   }
 
   /**
@@ -189,7 +189,7 @@ public abstract class uintType<T extends uintType<T>>
     // If bit is beyond the current array length, no change
     return (this.ints.length <= (bit >>> 5))
         ? (T) this
-        : newInstance(Arrays.clearBit(this.ints, bit));
+        : newInstance(BytesArray.clearBit(this.ints, bit));
   }
 
   /**
@@ -203,7 +203,7 @@ public abstract class uintType<T extends uintType<T>>
     // If bit is beyond the max width, no change
     return (getMaxWidth() <= (bit >>> 5))
         ? (T) this
-        : newInstance(Arrays.flipBit(this.ints, bit));
+        : newInstance(BytesArray.flipBit(this.ints, bit));
   }
 
   /**
@@ -217,7 +217,7 @@ public abstract class uintType<T extends uintType<T>>
     if (places < 0) {
       return shiftRight(-places);
     }
-    return newInstance(Arrays.lshift(this.ints, places, getMaxWidth()));
+    return newInstance(BytesArray.lshift(this.ints, places, getMaxWidth()));
   }
 
   /**
@@ -231,14 +231,14 @@ public abstract class uintType<T extends uintType<T>>
     if (places < 0) {
       return shiftLeft(-places);
     }
-    return newInstance(Arrays.rshift(this.ints, places, getMaxWidth()));
+    return newInstance(BytesArray.rshift(this.ints, places, getMaxWidth()));
   }
 
   /**
    * {@code this + 1}
    */
   public T inc() {
-    return newInstance(Arrays.inc(this.ints, getMaxWidth()));
+    return newInstance(BytesArray.inc(this.ints, getMaxWidth()));
   }
 
   /**
@@ -248,7 +248,7 @@ public abstract class uintType<T extends uintType<T>>
     if (isZero()) {
       return getMaxValue();
     }
-    return newInstance(Arrays.dec(this.ints));
+    return newInstance(BytesArray.dec(this.ints));
   }
 
   /**
@@ -261,7 +261,7 @@ public abstract class uintType<T extends uintType<T>>
     if (other.isZero()) {
       return self();
     }
-    return newInstance(Arrays.add(this.ints, other.ints, getMaxWidth()));
+    return newInstance(BytesArray.add(this.ints, other.ints, getMaxWidth()));
   }
 
   /**
@@ -272,9 +272,9 @@ public abstract class uintType<T extends uintType<T>>
       throw new ArithmeticException("div/mod by zero");
     }
     if (this.isZero() && add.isZero()) {
-      return newInstance(Arrays.ZERO);
+      return newInstance(BytesArray.ZERO);
     }
-    return newInstance(Arrays.addmod(this.ints, add.ints, mod.ints));
+    return newInstance(BytesArray.addmod(this.ints, add.ints, mod.ints));
   }
 
   /**
@@ -286,14 +286,14 @@ public abstract class uintType<T extends uintType<T>>
     }
     int cmp = compareTo(other);
     if (cmp == 0) {
-      return newInstance(Arrays.ZERO);
+      return newInstance(BytesArray.ZERO);
     }
     if (cmp < 0) {
       // subgt: (this - other + 2^N)
-      return newInstance(Arrays.subgt(this.ints, other.ints, getMaxValue().ints));
+      return newInstance(BytesArray.subgt(this.ints, other.ints, getMaxValue().ints));
     }
     // normal subtraction
-    return newInstance(Arrays.sub(this.ints, other.ints));
+    return newInstance(BytesArray.sub(this.ints, other.ints));
   }
 
   /**
@@ -301,9 +301,9 @@ public abstract class uintType<T extends uintType<T>>
    */
   public T multiply(T other) {
     if (this.ints.length == 0 || other.ints.length == 0) {
-      return newInstance(Arrays.ZERO);
+      return newInstance(BytesArray.ZERO);
     }
-    return newInstance(Arrays.multiply(this.ints, other.ints, getMaxWidth()));
+    return newInstance(BytesArray.multiply(this.ints, other.ints, getMaxWidth()));
   }
 
   /**
@@ -313,7 +313,7 @@ public abstract class uintType<T extends uintType<T>>
     if (mod.isZero()) {
       throw new ArithmeticException("div/mod by zero");
     }
-    return newInstance(Arrays.mulmod(this.ints, mul.ints, mod.ints));
+    return newInstance(BytesArray.mulmod(this.ints, mul.ints, mod.ints));
   }
 
   /**
@@ -325,7 +325,7 @@ public abstract class uintType<T extends uintType<T>>
     }
     if (exp == 0) {
       // x^0 = 1
-      return newInstance(Arrays.ONE);
+      return newInstance(BytesArray.ONE);
     }
     if (isZero()) {
       // 0^exp = 0
@@ -334,7 +334,7 @@ public abstract class uintType<T extends uintType<T>>
     if (exp == 1) {
       return self();
     }
-    return newInstance(Arrays.pow(this.ints, getLowestSetBit(), exp, getMaxWidth()));
+    return newInstance(BytesArray.pow(this.ints, getLowestSetBit(), exp, getMaxWidth()));
   }
 
   /**
@@ -345,17 +345,17 @@ public abstract class uintType<T extends uintType<T>>
       throw new ArithmeticException("div/mod by zero");
     }
     if (isZero()) {
-      return newInstance(Arrays.ZERO);
+      return newInstance(BytesArray.ZERO);
     }
     int cmp = compareTo(other);
     if (cmp < 0) {
-      return newInstance(Arrays.ZERO);
+      return newInstance(BytesArray.ZERO);
     }
     if (cmp == 0) {
       // equals => quotient is 1
-      return newInstance(Arrays.ONE);
+      return newInstance(BytesArray.ONE);
     }
-    return newInstance(Arrays.divide(this.ints, other.ints));
+    return newInstance(BytesArray.divide(this.ints, other.ints));
   }
 
   /**
@@ -366,16 +366,16 @@ public abstract class uintType<T extends uintType<T>>
       throw new ArithmeticException("div/mod by zero");
     }
     if (isZero()) {
-      return newInstance(Arrays.ZERO);
+      return newInstance(BytesArray.ZERO);
     }
     int cmp = compareTo(other);
     if (cmp < 0) {
       return self();
     }
     if (cmp == 0) {
-      return newInstance(Arrays.ZERO);
+      return newInstance(BytesArray.ZERO);
     }
-    return newInstance(Arrays.mod(this.ints, other.ints));
+    return newInstance(BytesArray.mod(this.ints, other.ints));
   }
 
   /**
@@ -388,24 +388,24 @@ public abstract class uintType<T extends uintType<T>>
     }
     if (isZero()) {
       return (T[]) new uintType<?>[] {
-          newInstance(Arrays.ZERO),
-          newInstance(Arrays.ZERO)
+          newInstance(BytesArray.ZERO),
+          newInstance(BytesArray.ZERO)
       };
     }
     int cmp = compareTo(other);
     if (cmp < 0) {
       return (T[]) new uintType<?>[] {
-          newInstance(Arrays.ZERO),
+          newInstance(BytesArray.ZERO),
           self()
       };
     }
     if (cmp == 0) {
       return (T[]) new uintType<?>[] {
-          newInstance(Arrays.ONE),
-          newInstance(Arrays.ZERO)
+          newInstance(BytesArray.ONE),
+          newInstance(BytesArray.ZERO)
       };
     }
-    int[][] qr = Arrays.divmod(this.ints, other.ints);
+    int[][] qr = BytesArray.divmod(this.ints, other.ints);
     return (T[]) new uintType<?>[] {
         newInstance(qr[0]),   // quotient
         newInstance(qr[1])    // remainder
@@ -439,7 +439,7 @@ public abstract class uintType<T extends uintType<T>>
 
   /** Returns the number of bits needed to represent this value in binary. */
   public final int bitLength() {
-    return Arrays.bitLength(this.ints);
+    return BytesArray.bitLength(this.ints);
   }
 
   /**
@@ -457,7 +457,7 @@ public abstract class uintType<T extends uintType<T>>
 
   @Override
   public final int compareTo(T other) {
-    return Arrays.compare(this.ints, other.ints);
+    return BytesArray.compare(this.ints, other.ints);
   }
 
   @Override
@@ -471,11 +471,11 @@ public abstract class uintType<T extends uintType<T>>
     // compare with another uintType
     if (other instanceof uintType) {
       uintType<?> o = (uintType<?>) other;
-      return (Arrays.compare(this.ints, o.ints) == 0);
+      return (BytesArray.compare(this.ints, o.ints) == 0);
     }
     // compare with BigInteger
     if (other instanceof BigInteger) {
-      return Arrays.compare(this.ints, (BigInteger) other, getMaxWidth()) == 0;
+      return BytesArray.compare(this.ints, (BigInteger) other, getMaxWidth()) == 0;
     }
     return false;
   }
@@ -602,9 +602,9 @@ public abstract class uintType<T extends uintType<T>>
    */
   public final void fromByteArray(byte[] bytes) {
     // Convert with respect to the maxValue.ints
-    int[] array = Arrays.from(bytes, getMaxValue().ints);
+    int[] array = BytesArray.from(bytes, getMaxValue().ints);
     // Then strip if it exceeds getMaxWidth()
-    array = Arrays.stripLeadingZeroes(
+    array = BytesArray.stripLeadingZeroes(
         array, Math.max(0, array.length - getMaxWidth())
     );
     this.ints = array;
@@ -685,8 +685,8 @@ public abstract class uintType<T extends uintType<T>>
       return false;
     }
     // Same logic as fromByteArray:
-    int[] array = Arrays.from(bytes, getMaxValue().ints);
-    array = Arrays.stripLeadingZeroes(
+    int[] array = BytesArray.from(bytes, getMaxValue().ints);
+    array = BytesArray.stripLeadingZeroes(
         array, Math.max(0, array.length - getMaxWidth())
     );
     this.ints = array;

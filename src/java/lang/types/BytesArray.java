@@ -7,7 +7,7 @@ import static java.util.Arrays.copyOf;
 /**
  * These methods don't mutate their arguments or return arrays w/ leading zeroes.
  */
-public final class Arrays {
+public final class BytesArray {
   public static final long    LONG       = 0xffffffffL;
   public static final int     MAX_CACHE  = 28;
   public static final int[][] CACHE      = new int[MAX_CACHE][1];

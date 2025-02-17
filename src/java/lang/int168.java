@@ -27,6 +27,10 @@ public final class int168 extends intType<int168> {
     public static final int168 ZERO = new int168(0);
     public static final int168 ONE = new int168(1);
     public static final int168 MINUS_ONE = new int168(-1);
+
+    public static int168 valueOf(byte[] value) {
+        return new int168(value);
+    }
     
     @Override
     public int bitSize() {

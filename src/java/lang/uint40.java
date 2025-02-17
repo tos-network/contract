@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^40.
@@ -27,11 +27,11 @@ public final class uint40 extends uintType<uint40> {
      * The maximum representable value of uint40 (2^40 - 1).
      */
     public static final uint40 MAX_VALUE =
-        new uint40(Arrays.maxValue(MAX_WIDTH));
+        new uint40(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint40 ZERO = new uint40(Arrays.ZERO);
-    public static final uint40 ONE  = new uint40(Arrays.ONE);
-    public static final uint40 TWO  = new uint40(Arrays.TWO);
+    public static final uint40 ZERO = new uint40(BytesArray.ZERO);
+    public static final uint40 ONE  = new uint40(BytesArray.ONE);
+    public static final uint40 TWO  = new uint40(BytesArray.TWO);
 
     // Constructors...
     public uint40(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint40 extends uintType<uint40> {
     public uint40(long v)                  { super(v);              }
     public uint40(BigInteger b)            { super(b);              }
     public uint40(uintType<?> other)       { super(other);          }
+
+    public static uint40 valueOf(byte[] value) {
+        return new uint40(value);
+    }
 
     @Override
     public uint40 getMaxValue() {

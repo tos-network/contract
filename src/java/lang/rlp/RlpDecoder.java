@@ -48,7 +48,9 @@ public class RlpDecoder {
      */
     public static RlpList decode(byte[] rlpEncoded) {
         RlpList rlpList = new RlpList(new ArrayList<>());
-        traverse(rlpEncoded, 0, rlpEncoded.length, rlpList);
+        if (rlpEncoded != null) {
+            traverse(rlpEncoded, 0, rlpEncoded.length, rlpList);
+        }
         return rlpList;
     }
 

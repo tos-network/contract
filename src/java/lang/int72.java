@@ -27,6 +27,10 @@ public final class int72 extends intType<int72> {
     public static final int72 ZERO = new int72(0);
     public static final int72 ONE = new int72(1);
     public static final int72 MINUS_ONE = new int72(-1);
+
+    public static int72 valueOf(byte[] value) {
+        return new int72(value);
+    }
     
     @Override
     public int bitSize() {

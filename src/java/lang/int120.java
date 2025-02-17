@@ -27,6 +27,10 @@ public final class int120 extends intType<int120> {
     public static final int120 ZERO = new int120(0);
     public static final int120 ONE = new int120(1);
     public static final int120 MINUS_ONE = new int120(-1);
+
+    public static int120 valueOf(byte[] value) {
+        return new int120(value);
+    }
     
     @Override
     public int bitSize() {

@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^88.
@@ -27,11 +27,11 @@ public final class uint88 extends uintType<uint88> {
      * The maximum representable value of uint88 (2^88 - 1).
      */
     public static final uint88 MAX_VALUE =
-        new uint88(Arrays.maxValue(MAX_WIDTH));
+        new uint88(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint88 ZERO = new uint88(Arrays.ZERO);
-    public static final uint88 ONE  = new uint88(Arrays.ONE);
-    public static final uint88 TWO  = new uint88(Arrays.TWO);
+    public static final uint88 ZERO = new uint88(BytesArray.ZERO);
+    public static final uint88 ONE  = new uint88(BytesArray.ONE);
+    public static final uint88 TWO  = new uint88(BytesArray.TWO);
 
     // Constructors...
     public uint88(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint88 extends uintType<uint88> {
     public uint88(long v)                  { super(v);              }
     public uint88(BigInteger b)            { super(b);              }
     public uint88(uintType<?> other)       { super(other);          }
+
+    public static uint88 valueOf(byte[] value) {
+        return new uint88(value);
+    }
 
     @Override
     public uint88 getMaxValue() {

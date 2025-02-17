@@ -27,6 +27,10 @@ public final class int256 extends intType<int256> {
     public static final int256 ZERO = new int256(0);
     public static final int256 ONE = new int256(1);
     public static final int256 MINUS_ONE = new int256(-1);
+
+    public static int256 valueOf(byte[] value) {
+        return new int256(value);
+    }
     
     @Override
     public int bitSize() {

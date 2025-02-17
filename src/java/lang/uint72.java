@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^72.
@@ -27,11 +27,11 @@ public final class uint72 extends uintType<uint72> {
      * The maximum representable value of uint72 (2^72 - 1).
      */
     public static final uint72 MAX_VALUE =
-        new uint72(Arrays.maxValue(MAX_WIDTH));
+        new uint72(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint72 ZERO = new uint72(Arrays.ZERO);
-    public static final uint72 ONE  = new uint72(Arrays.ONE);
-    public static final uint72 TWO  = new uint72(Arrays.TWO);
+    public static final uint72 ZERO = new uint72(BytesArray.ZERO);
+    public static final uint72 ONE  = new uint72(BytesArray.ONE);
+    public static final uint72 TWO  = new uint72(BytesArray.TWO);
 
     // Constructors...
     public uint72(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint72 extends uintType<uint72> {
     public uint72(long v)                  { super(v);              }
     public uint72(BigInteger b)            { super(b);              }
     public uint72(uintType<?> other)       { super(other);          }
+
+    public static uint72 valueOf(byte[] value) {
+        return new uint72(value);
+    }
 
     @Override
     public uint72 getMaxValue() {

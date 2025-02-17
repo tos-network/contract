@@ -27,6 +27,10 @@ public final class int96 extends intType<int96> {
     public static final int96 ZERO = new int96(0);
     public static final int96 ONE = new int96(1);
     public static final int96 MINUS_ONE = new int96(-1);
+
+    public static int96 valueOf(byte[] value) {
+        return new int96(value);
+    }
     
     @Override
     public int bitSize() {

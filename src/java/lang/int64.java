@@ -27,6 +27,10 @@ public final class int64 extends intType<int64> {
     public static final int64 ZERO = new int64(0);
     public static final int64 ONE = new int64(1);
     public static final int64 MINUS_ONE = new int64(-1);
+
+    public static int64 valueOf(byte[] value) {
+        return new int64(value);
+    }
     
     @Override
     public int bitSize() {

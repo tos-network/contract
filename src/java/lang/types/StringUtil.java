@@ -1,6 +1,6 @@
 package java.lang.types;
 
-import static java.lang.types.Arrays.LONG;
+import static java.lang.types.BytesArray.LONG;
 import java.util.List;
 
 /**
@@ -67,7 +67,7 @@ public final class StringUtil {
       pos++;
 
     if(pos == len)
-      return Arrays.ZERO;
+      return BytesArray.ZERO;
 
     final int digits = len - pos, perint = DIGITS_PER_INT[radix - 2];
     final long bits  = ((digits * BITS_PER_DIGIT[radix - 2]) >>> 10) + 1;
@@ -91,7 +91,7 @@ public final class StringUtil {
       muladd(ints, superradix, groupv);
     }
 
-    return Arrays.stripLeadingZeroes(ints);
+    return BytesArray.stripLeadingZeroes(ints);
   }
 
   private static void muladd(final int[] out, final int mul, final int add) {
@@ -124,7 +124,7 @@ public final class StringUtil {
     int[][] tmp;
 
     do {
-      tmp = Arrays.divmod(q, divisor);
+      tmp = BytesArray.divmod(q, divisor);
       q   = tmp[0];
       r   = tmp[1];
       if(r.length == 0)

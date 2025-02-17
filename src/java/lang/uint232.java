@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^232.
@@ -27,11 +27,11 @@ public final class uint232 extends uintType<uint232> {
      * The maximum representable value of uint232 (2^232 - 1).
      */
     public static final uint232 MAX_VALUE =
-        new uint232(Arrays.maxValue(MAX_WIDTH));
+        new uint232(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint232 ZERO = new uint232(Arrays.ZERO);
-    public static final uint232 ONE  = new uint232(Arrays.ONE);
-    public static final uint232 TWO  = new uint232(Arrays.TWO);
+    public static final uint232 ZERO = new uint232(BytesArray.ZERO);
+    public static final uint232 ONE  = new uint232(BytesArray.ONE);
+    public static final uint232 TWO  = new uint232(BytesArray.TWO);
 
     // Constructors...
     public uint232(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint232 extends uintType<uint232> {
     public uint232(long v)                  { super(v);              }
     public uint232(BigInteger b)            { super(b);              }
     public uint232(uintType<?> other)       { super(other);          }
+
+    public static uint232 valueOf(byte[] value) {
+        return new uint232(value);
+    }
 
     @Override
     public uint232 getMaxValue() {

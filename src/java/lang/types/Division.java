@@ -1,7 +1,5 @@
 package java.lang.types;
 
-import static java.lang.types.Arrays.LONG;
-
 final class Division {
   private static long LONG = 0xffffffffL;
 
@@ -375,17 +373,17 @@ final class Division {
     }
 
     // Handle signs
-    boolean negativeResult = (Arrays.isNegative(a) != Arrays.isNegative(b));
+    boolean negativeResult = (BytesArray.isNegative(a) != BytesArray.isNegative(b));
     
     // Get absolute values
-    int[] absA = Arrays.isNegative(a) ? Arrays.negate(a) : a;
-    int[] absB = Arrays.isNegative(b) ? Arrays.negate(b) : b;
+    int[] absA = BytesArray.isNegative(a) ? BytesArray.negate(a) : a;
+    int[] absB = BytesArray.isNegative(b) ? BytesArray.negate(b) : b;
     
     // Special case for single-element arrays
     if (absB.length == 1) {
       int[][] result = div(absA, absB[0] & LONG);
       if (negativeResult && result[0].length > 0) {
-        result[0] = Arrays.negate(result[0]);
+        result[0] = BytesArray.negate(result[0]);
       }
       return result;
     }
@@ -395,7 +393,7 @@ final class Division {
     
     // Apply sign to quotient if needed
     if (negativeResult && result[0].length > 0) {
-      result[0] = Arrays.negate(result[0]);
+      result[0] = BytesArray.negate(result[0]);
     }
     
     return result;

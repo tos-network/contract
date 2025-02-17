@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^80.
@@ -27,11 +27,11 @@ public final class uint80 extends uintType<uint80> {
      * The maximum representable value of uint80 (2^80 - 1).
      */
     public static final uint80 MAX_VALUE =
-        new uint80(Arrays.maxValue(MAX_WIDTH));
+        new uint80(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint80 ZERO = new uint80(Arrays.ZERO);
-    public static final uint80 ONE  = new uint80(Arrays.ONE);
-    public static final uint80 TWO  = new uint80(Arrays.TWO);
+    public static final uint80 ZERO = new uint80(BytesArray.ZERO);
+    public static final uint80 ONE  = new uint80(BytesArray.ONE);
+    public static final uint80 TWO  = new uint80(BytesArray.TWO);
 
     // Constructors...
     public uint80(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint80 extends uintType<uint80> {
     public uint80(long v)                  { super(v);              }
     public uint80(BigInteger b)            { super(b);              }
     public uint80(uintType<?> other)       { super(other);          }
+
+    public static uint80 valueOf(byte[] value) {
+        return new uint80(value);
+    }
 
     @Override
     public uint80 getMaxValue() {

@@ -27,6 +27,10 @@ public final class int248 extends intType<int248> {
     public static final int248 ZERO = new int248(0);
     public static final int248 ONE = new int248(1);
     public static final int248 MINUS_ONE = new int248(-1);
+
+    public static int248 valueOf(byte[] value) {
+        return new int248(value);
+    }
     
     @Override
     public int bitSize() {

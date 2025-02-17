@@ -18,6 +18,16 @@ public class address implements Type<String>, Storable {
 
     private final uint160 value;
 
+    /**
+     * Returns a new address instance from a BigInteger value.
+     *
+     * @param value The BigInteger value to convert to an address.
+     * @return A new address instance with the specified value.
+     */
+    public static address valueOf(BigInteger value) {
+        return new address(value);
+    }
+
     public address(uint160 value) {
         this.value = value;
     }

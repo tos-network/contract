@@ -27,6 +27,10 @@ public final class int200 extends intType<int200> {
     public static final int200 ZERO = new int200(0);
     public static final int200 ONE = new int200(1);
     public static final int200 MINUS_ONE = new int200(-1);
+
+    public static int200 valueOf(byte[] value) {
+        return new int200(value);
+    }
     
     @Override
     public int bitSize() {

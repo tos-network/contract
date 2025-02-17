@@ -27,6 +27,10 @@ public final class int48 extends intType<int48> {
     public static final int48 ZERO = new int48(0);
     public static final int48 ONE = new int48(1);
     public static final int48 MINUS_ONE = new int48(-1);
+
+    public static int48 valueOf(byte[] value) {
+        return new int48(value);
+    }
     
     @Override
     public int bitSize() {

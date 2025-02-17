@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^64.
@@ -27,11 +27,11 @@ public final class uint64 extends uintType<uint64> {
      * The maximum representable value of uint64 (2^64 - 1).
      */
     public static final uint64 MAX_VALUE =
-        new uint64(Arrays.maxValue(MAX_WIDTH));
+        new uint64(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint64 ZERO = new uint64(Arrays.ZERO);
-    public static final uint64 ONE  = new uint64(Arrays.ONE);
-    public static final uint64 TWO  = new uint64(Arrays.TWO);
+    public static final uint64 ZERO = new uint64(BytesArray.ZERO);
+    public static final uint64 ONE  = new uint64(BytesArray.ONE);
+    public static final uint64 TWO  = new uint64(BytesArray.TWO);
 
     // Constructors...
     public uint64(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint64 extends uintType<uint64> {
     public uint64(long v)                  { super(v);              }
     public uint64(BigInteger b)            { super(b);              }
     public uint64(uintType<?> other)       { super(other);          }
+
+    public static uint64 valueOf(byte[] value) {
+        return new uint64(value);
+    }
 
     @Override
     public uint64 getMaxValue() {

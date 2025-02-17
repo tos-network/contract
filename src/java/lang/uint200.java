@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^200.
@@ -27,11 +27,11 @@ public final class uint200 extends uintType<uint200> {
      * The maximum representable value of uint200 (2^200 - 1).
      */
     public static final uint200 MAX_VALUE =
-        new uint200(Arrays.maxValue(MAX_WIDTH));
+        new uint200(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint200 ZERO = new uint200(Arrays.ZERO);
-    public static final uint200 ONE  = new uint200(Arrays.ONE);
-    public static final uint200 TWO  = new uint200(Arrays.TWO);
+    public static final uint200 ZERO = new uint200(BytesArray.ZERO);
+    public static final uint200 ONE  = new uint200(BytesArray.ONE);
+    public static final uint200 TWO  = new uint200(BytesArray.TWO);
 
     // Constructors...
     public uint200(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint200 extends uintType<uint200> {
     public uint200(long v)                  { super(v);              }
     public uint200(BigInteger b)            { super(b);              }
     public uint200(uintType<?> other)       { super(other);          }
+
+    public static uint200 valueOf(byte[] value) {
+        return new uint200(value);
+    }
 
     @Override
     public uint200 getMaxValue() {

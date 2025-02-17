@@ -27,6 +27,10 @@ public final class int32 extends intType<int32> {
     public static final int32 ZERO = new int32(0);
     public static final int32 ONE = new int32(1);
     public static final int32 MINUS_ONE = new int32(-1);
+
+    public static int32 valueOf(byte[] value) {
+        return new int32(value);
+    }
     
     @Override
     public int bitSize() {

@@ -27,6 +27,10 @@ public final class int184 extends intType<int184> {
     public static final int184 ZERO = new int184(0);
     public static final int184 ONE = new int184(1);
     public static final int184 MINUS_ONE = new int184(-1);
+
+    public static int184 valueOf(byte[] value) {
+        return new int184(value);
+    }
     
     @Override
     public int bitSize() {

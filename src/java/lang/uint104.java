@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^104.
@@ -27,11 +27,11 @@ public final class uint104 extends uintType<uint104> {
      * The maximum representable value of uint104 (2^104 - 1).
      */
     public static final uint104 MAX_VALUE =
-        new uint104(Arrays.maxValue(MAX_WIDTH));
+        new uint104(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint104 ZERO = new uint104(Arrays.ZERO);
-    public static final uint104 ONE  = new uint104(Arrays.ONE);
-    public static final uint104 TWO  = new uint104(Arrays.TWO);
+    public static final uint104 ZERO = new uint104(BytesArray.ZERO);
+    public static final uint104 ONE  = new uint104(BytesArray.ONE);
+    public static final uint104 TWO  = new uint104(BytesArray.TWO);
 
     // Constructors...
     public uint104(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint104 extends uintType<uint104> {
     public uint104(long v)                  { super(v);              }
     public uint104(BigInteger b)            { super(b);              }
     public uint104(uintType<?> other)       { super(other);          }
+
+    public static uint104 valueOf(byte[] value) {
+        return new uint104(value);
+    }
 
     @Override
     public uint104 getMaxValue() {

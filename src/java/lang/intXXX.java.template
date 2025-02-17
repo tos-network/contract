@@ -27,6 +27,10 @@ public final class __CLASSNAME__ extends intType<__CLASSNAME__> {
     public static final __CLASSNAME__ ZERO = new __CLASSNAME__(0);
     public static final __CLASSNAME__ ONE = new __CLASSNAME__(1);
     public static final __CLASSNAME__ MINUS_ONE = new __CLASSNAME__(-1);
+
+    public static __CLASSNAME__ valueOf(byte[] value) {
+        return new __CLASSNAME__(value);
+    }
     
     @Override
     public int bitSize() {

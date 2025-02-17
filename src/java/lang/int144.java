@@ -27,6 +27,10 @@ public final class int144 extends intType<int144> {
     public static final int144 ZERO = new int144(0);
     public static final int144 ONE = new int144(1);
     public static final int144 MINUS_ONE = new int144(-1);
+
+    public static int144 valueOf(byte[] value) {
+        return new int144(value);
+    }
     
     @Override
     public int bitSize() {

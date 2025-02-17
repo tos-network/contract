@@ -27,6 +27,10 @@ public final class int80 extends intType<int80> {
     public static final int80 ZERO = new int80(0);
     public static final int80 ONE = new int80(1);
     public static final int80 MINUS_ONE = new int80(-1);
+
+    public static int80 valueOf(byte[] value) {
+        return new int80(value);
+    }
     
     @Override
     public int bitSize() {

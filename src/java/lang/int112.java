@@ -27,6 +27,10 @@ public final class int112 extends intType<int112> {
     public static final int112 ZERO = new int112(0);
     public static final int112 ONE = new int112(1);
     public static final int112 MINUS_ONE = new int112(-1);
+
+    public static int112 valueOf(byte[] value) {
+        return new int112(value);
+    }
     
     @Override
     public int bitSize() {

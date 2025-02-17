@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^48.
@@ -27,11 +27,11 @@ public final class uint48 extends uintType<uint48> {
      * The maximum representable value of uint48 (2^48 - 1).
      */
     public static final uint48 MAX_VALUE =
-        new uint48(Arrays.maxValue(MAX_WIDTH));
+        new uint48(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint48 ZERO = new uint48(Arrays.ZERO);
-    public static final uint48 ONE  = new uint48(Arrays.ONE);
-    public static final uint48 TWO  = new uint48(Arrays.TWO);
+    public static final uint48 ZERO = new uint48(BytesArray.ZERO);
+    public static final uint48 ONE  = new uint48(BytesArray.ONE);
+    public static final uint48 TWO  = new uint48(BytesArray.TWO);
 
     // Constructors...
     public uint48(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint48 extends uintType<uint48> {
     public uint48(long v)                  { super(v);              }
     public uint48(BigInteger b)            { super(b);              }
     public uint48(uintType<?> other)       { super(other);          }
+
+    public static uint48 valueOf(byte[] value) {
+        return new uint48(value);
+    }
 
     @Override
     public uint48 getMaxValue() {

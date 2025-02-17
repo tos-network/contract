@@ -27,6 +27,10 @@ public final class int152 extends intType<int152> {
     public static final int152 ZERO = new int152(0);
     public static final int152 ONE = new int152(1);
     public static final int152 MINUS_ONE = new int152(-1);
+
+    public static int152 valueOf(byte[] value) {
+        return new int152(value);
+    }
     
     @Override
     public int bitSize() {

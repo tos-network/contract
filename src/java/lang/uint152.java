@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^152.
@@ -27,11 +27,11 @@ public final class uint152 extends uintType<uint152> {
      * The maximum representable value of uint152 (2^152 - 1).
      */
     public static final uint152 MAX_VALUE =
-        new uint152(Arrays.maxValue(MAX_WIDTH));
+        new uint152(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint152 ZERO = new uint152(Arrays.ZERO);
-    public static final uint152 ONE  = new uint152(Arrays.ONE);
-    public static final uint152 TWO  = new uint152(Arrays.TWO);
+    public static final uint152 ZERO = new uint152(BytesArray.ZERO);
+    public static final uint152 ONE  = new uint152(BytesArray.ONE);
+    public static final uint152 TWO  = new uint152(BytesArray.TWO);
 
     // Constructors...
     public uint152(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint152 extends uintType<uint152> {
     public uint152(long v)                  { super(v);              }
     public uint152(BigInteger b)            { super(b);              }
     public uint152(uintType<?> other)       { super(other);          }
+
+    public static uint152 valueOf(byte[] value) {
+        return new uint152(value);
+    }
 
     @Override
     public uint152 getMaxValue() {

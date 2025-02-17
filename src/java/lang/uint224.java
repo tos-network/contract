@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^224.
@@ -27,11 +27,11 @@ public final class uint224 extends uintType<uint224> {
      * The maximum representable value of uint224 (2^224 - 1).
      */
     public static final uint224 MAX_VALUE =
-        new uint224(Arrays.maxValue(MAX_WIDTH));
+        new uint224(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint224 ZERO = new uint224(Arrays.ZERO);
-    public static final uint224 ONE  = new uint224(Arrays.ONE);
-    public static final uint224 TWO  = new uint224(Arrays.TWO);
+    public static final uint224 ZERO = new uint224(BytesArray.ZERO);
+    public static final uint224 ONE  = new uint224(BytesArray.ONE);
+    public static final uint224 TWO  = new uint224(BytesArray.TWO);
 
     // Constructors...
     public uint224(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint224 extends uintType<uint224> {
     public uint224(long v)                  { super(v);              }
     public uint224(BigInteger b)            { super(b);              }
     public uint224(uintType<?> other)       { super(other);          }
+
+    public static uint224 valueOf(byte[] value) {
+        return new uint224(value);
+    }
 
     @Override
     public uint224 getMaxValue() {

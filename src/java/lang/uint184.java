@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^184.
@@ -27,11 +27,11 @@ public final class uint184 extends uintType<uint184> {
      * The maximum representable value of uint184 (2^184 - 1).
      */
     public static final uint184 MAX_VALUE =
-        new uint184(Arrays.maxValue(MAX_WIDTH));
+        new uint184(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint184 ZERO = new uint184(Arrays.ZERO);
-    public static final uint184 ONE  = new uint184(Arrays.ONE);
-    public static final uint184 TWO  = new uint184(Arrays.TWO);
+    public static final uint184 ZERO = new uint184(BytesArray.ZERO);
+    public static final uint184 ONE  = new uint184(BytesArray.ONE);
+    public static final uint184 TWO  = new uint184(BytesArray.TWO);
 
     // Constructors...
     public uint184(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint184 extends uintType<uint184> {
     public uint184(long v)                  { super(v);              }
     public uint184(BigInteger b)            { super(b);              }
     public uint184(uintType<?> other)       { super(other);          }
+
+    public static uint184 valueOf(byte[] value) {
+        return new uint184(value);
+    }
 
     @Override
     public uint184 getMaxValue() {

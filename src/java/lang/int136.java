@@ -27,6 +27,10 @@ public final class int136 extends intType<int136> {
     public static final int136 ZERO = new int136(0);
     public static final int136 ONE = new int136(1);
     public static final int136 MINUS_ONE = new int136(-1);
+
+    public static int136 valueOf(byte[] value) {
+        return new int136(value);
+    }
     
     @Override
     public int bitSize() {

@@ -63,6 +63,7 @@ public abstract class intType<T extends intType<T>>
      */
     protected abstract int getMaxWidth();
 
+
     /* ====================================================== */
     /*                    Helper Methods                      */
     /* ====================================================== */

@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^240.
@@ -27,11 +27,11 @@ public final class uint240 extends uintType<uint240> {
      * The maximum representable value of uint240 (2^240 - 1).
      */
     public static final uint240 MAX_VALUE =
-        new uint240(Arrays.maxValue(MAX_WIDTH));
+        new uint240(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint240 ZERO = new uint240(Arrays.ZERO);
-    public static final uint240 ONE  = new uint240(Arrays.ONE);
-    public static final uint240 TWO  = new uint240(Arrays.TWO);
+    public static final uint240 ZERO = new uint240(BytesArray.ZERO);
+    public static final uint240 ONE  = new uint240(BytesArray.ONE);
+    public static final uint240 TWO  = new uint240(BytesArray.TWO);
 
     // Constructors...
     public uint240(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint240 extends uintType<uint240> {
     public uint240(long v)                  { super(v);              }
     public uint240(BigInteger b)            { super(b);              }
     public uint240(uintType<?> other)       { super(other);          }
+
+    public static uint240 valueOf(byte[] value) {
+        return new uint240(value);
+    }
 
     @Override
     public uint240 getMaxValue() {

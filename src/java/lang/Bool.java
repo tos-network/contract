@@ -12,6 +12,17 @@ public class bool implements Type<Boolean> {
 
     private boolean value;
 
+    public static bool valueOf(boolean value) {
+        return new bool(value);
+    }
+
+    public static bool valueOf(byte[] value) {
+        if (value.length != 1) {
+           return new bool(false);
+        }
+        return new bool(value[0] != 0);
+    }
+
     public bool(boolean value) {
         this.value = value;
     }

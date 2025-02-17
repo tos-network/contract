@@ -77,6 +77,30 @@ public class Message {
     private native byte[] nativeGetGas();
 
     /**
+     * Get execution success status
+     * @return true if execution was successful
+     */
+    private native boolean nativeGetSuccess();
+
+    /**
+     * Get execution output
+     * @return output byte array
+     */
+    private native byte[] nativeGetOutput();
+
+    /**
+     * Set execution success status
+     * @param success execution status
+     */
+    private native void nativeSetSuccess(boolean success);
+
+    /**
+     * Set execution output
+     * @param output output byte array
+     */
+    private native void nativeSetOutput(byte[] output);
+
+    /**
      * Constructs a new Message with the specified sender and data.
      *
      */
@@ -154,6 +178,38 @@ public class Message {
      */
     public final uint256 getGas() {
         return gas;
+    }
+
+    /**
+     * Get execution success status
+     * @return true if execution was successful
+     */
+    public final boolean getSuccess() {
+        return nativeGetSuccess();
+    }
+
+    /**
+     * Set execution success status
+     * @param success execution status
+     */
+    public final void setSuccess(boolean success) {
+        nativeSetSuccess(success);
+    }
+
+    /**
+     * Get execution output
+     * @return output byte array
+     */
+    public final byte[] getOutput() {
+        return nativeGetOutput();
+    }
+
+    /**
+     * Set execution output
+     * @param output output byte array
+     */
+    public final void setOutput(byte[] output) {
+        nativeSetOutput(output);
     }
 
     /**

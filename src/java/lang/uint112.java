@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^112.
@@ -27,11 +27,11 @@ public final class uint112 extends uintType<uint112> {
      * The maximum representable value of uint112 (2^112 - 1).
      */
     public static final uint112 MAX_VALUE =
-        new uint112(Arrays.maxValue(MAX_WIDTH));
+        new uint112(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint112 ZERO = new uint112(Arrays.ZERO);
-    public static final uint112 ONE  = new uint112(Arrays.ONE);
-    public static final uint112 TWO  = new uint112(Arrays.TWO);
+    public static final uint112 ZERO = new uint112(BytesArray.ZERO);
+    public static final uint112 ONE  = new uint112(BytesArray.ONE);
+    public static final uint112 TWO  = new uint112(BytesArray.TWO);
 
     // Constructors...
     public uint112(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint112 extends uintType<uint112> {
     public uint112(long v)                  { super(v);              }
     public uint112(BigInteger b)            { super(b);              }
     public uint112(uintType<?> other)       { super(other);          }
+
+    public static uint112 valueOf(byte[] value) {
+        return new uint112(value);
+    }
 
     @Override
     public uint112 getMaxValue() {

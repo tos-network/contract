@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 import java.util.Random;
 
 /**
@@ -204,13 +204,13 @@ public class TestMoreUint256 {
 
     /**
      * Return an int[] of length n with random content.
-     * We'll also add a 2.5% chance we produce Arrays.maxValue(n) to mimic your code.
+     * We'll also add a 2.5% chance we produce BytesArray.maxValue(n) to mimic your code.
      */
     private static int[] randomints(int n) {
         if (n == 0) return new int[0];
         // 2.5% chance => maxValue
         if (rnd.nextFloat() < 0.025) {
-            return Arrays.maxValue(n);
+            return BytesArray.maxValue(n);
         }
         int[] ints = new int[n];
         // 25% chance => "small" (Short.MAX_VALUE)

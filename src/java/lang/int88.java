@@ -27,6 +27,10 @@ public final class int88 extends intType<int88> {
     public static final int88 ZERO = new int88(0);
     public static final int88 ONE = new int88(1);
     public static final int88 MINUS_ONE = new int88(-1);
+
+    public static int88 valueOf(byte[] value) {
+        return new int88(value);
+    }
     
     @Override
     public int bitSize() {

@@ -27,6 +27,10 @@ public final class int176 extends intType<int176> {
     public static final int176 ZERO = new int176(0);
     public static final int176 ONE = new int176(1);
     public static final int176 MINUS_ONE = new int176(-1);
+
+    public static int176 valueOf(byte[] value) {
+        return new int176(value);
+    }
     
     @Override
     public int bitSize() {

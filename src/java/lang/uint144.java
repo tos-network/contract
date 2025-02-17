@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^144.
@@ -27,11 +27,11 @@ public final class uint144 extends uintType<uint144> {
      * The maximum representable value of uint144 (2^144 - 1).
      */
     public static final uint144 MAX_VALUE =
-        new uint144(Arrays.maxValue(MAX_WIDTH));
+        new uint144(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint144 ZERO = new uint144(Arrays.ZERO);
-    public static final uint144 ONE  = new uint144(Arrays.ONE);
-    public static final uint144 TWO  = new uint144(Arrays.TWO);
+    public static final uint144 ZERO = new uint144(BytesArray.ZERO);
+    public static final uint144 ONE  = new uint144(BytesArray.ONE);
+    public static final uint144 TWO  = new uint144(BytesArray.TWO);
 
     // Constructors...
     public uint144(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint144 extends uintType<uint144> {
     public uint144(long v)                  { super(v);              }
     public uint144(BigInteger b)            { super(b);              }
     public uint144(uintType<?> other)       { super(other);          }
+
+    public static uint144 valueOf(byte[] value) {
+        return new uint144(value);
+    }
 
     @Override
     public uint144 getMaxValue() {

@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^16.
@@ -27,11 +27,11 @@ public final class uint16 extends uintType<uint16> {
      * The maximum representable value of uint16 (2^16 - 1).
      */
     public static final uint16 MAX_VALUE =
-        new uint16(Arrays.maxValue(MAX_WIDTH));
+        new uint16(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint16 ZERO = new uint16(Arrays.ZERO);
-    public static final uint16 ONE  = new uint16(Arrays.ONE);
-    public static final uint16 TWO  = new uint16(Arrays.TWO);
+    public static final uint16 ZERO = new uint16(BytesArray.ZERO);
+    public static final uint16 ONE  = new uint16(BytesArray.ONE);
+    public static final uint16 TWO  = new uint16(BytesArray.TWO);
 
     // Constructors...
     public uint16(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint16 extends uintType<uint16> {
     public uint16(long v)                  { super(v);              }
     public uint16(BigInteger b)            { super(b);              }
     public uint16(uintType<?> other)       { super(other);          }
+
+    public static uint16 valueOf(byte[] value) {
+        return new uint16(value);
+    }
 
     @Override
     public uint16 getMaxValue() {

@@ -27,6 +27,10 @@ public final class int208 extends intType<int208> {
     public static final int208 ZERO = new int208(0);
     public static final int208 ONE = new int208(1);
     public static final int208 MINUS_ONE = new int208(-1);
+
+    public static int208 valueOf(byte[] value) {
+        return new int208(value);
+    }
     
     @Override
     public int bitSize() {

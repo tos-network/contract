@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 /**
- * A self-contained test class for Arrays.java without using JUnit
+ * A self-contained test class for BytesArray.java without using JUnit
  * and without throwing AssertionError. Instead, it prints either
  * "OK" for a passing check or prints the message for a failing check.
  */

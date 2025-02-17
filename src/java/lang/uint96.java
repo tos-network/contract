@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^96.
@@ -27,11 +27,11 @@ public final class uint96 extends uintType<uint96> {
      * The maximum representable value of uint96 (2^96 - 1).
      */
     public static final uint96 MAX_VALUE =
-        new uint96(Arrays.maxValue(MAX_WIDTH));
+        new uint96(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint96 ZERO = new uint96(Arrays.ZERO);
-    public static final uint96 ONE  = new uint96(Arrays.ONE);
-    public static final uint96 TWO  = new uint96(Arrays.TWO);
+    public static final uint96 ZERO = new uint96(BytesArray.ZERO);
+    public static final uint96 ONE  = new uint96(BytesArray.ONE);
+    public static final uint96 TWO  = new uint96(BytesArray.TWO);
 
     // Constructors...
     public uint96(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint96 extends uintType<uint96> {
     public uint96(long v)                  { super(v);              }
     public uint96(BigInteger b)            { super(b);              }
     public uint96(uintType<?> other)       { super(other);          }
+
+    public static uint96 valueOf(byte[] value) {
+        return new uint96(value);
+    }
 
     @Override
     public uint96 getMaxValue() {

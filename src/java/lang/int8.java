@@ -27,6 +27,10 @@ public final class int8 extends intType<int8> {
     public static final int8 ZERO = new int8(0);
     public static final int8 ONE = new int8(1);
     public static final int8 MINUS_ONE = new int8(-1);
+
+    public static int8 valueOf(byte[] value) {
+        return new int8(value);
+    }
     
     @Override
     public int bitSize() {

@@ -1,7 +1,7 @@
 package java.lang;
 
 import java.math.BigInteger;
-import java.lang.types.Arrays;
+import java.lang.types.BytesArray;
 
 /**
  * Represents an unsigned integer less than 2^120.
@@ -27,11 +27,11 @@ public final class uint120 extends uintType<uint120> {
      * The maximum representable value of uint120 (2^120 - 1).
      */
     public static final uint120 MAX_VALUE =
-        new uint120(Arrays.maxValue(MAX_WIDTH));
+        new uint120(BytesArray.maxValue(MAX_WIDTH));
 
-    public static final uint120 ZERO = new uint120(Arrays.ZERO);
-    public static final uint120 ONE  = new uint120(Arrays.ONE);
-    public static final uint120 TWO  = new uint120(Arrays.TWO);
+    public static final uint120 ZERO = new uint120(BytesArray.ZERO);
+    public static final uint120 ONE  = new uint120(BytesArray.ONE);
+    public static final uint120 TWO  = new uint120(BytesArray.TWO);
 
     // Constructors...
     public uint120(int[] ints)              { super(ints);           }
@@ -41,6 +41,10 @@ public final class uint120 extends uintType<uint120> {
     public uint120(long v)                  { super(v);              }
     public uint120(BigInteger b)            { super(b);              }
     public uint120(uintType<?> other)       { super(other);          }
+
+    public static uint120 valueOf(byte[] value) {
+        return new uint120(value);
+    }
 
     @Override
     public uint120 getMaxValue() {
