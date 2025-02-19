@@ -1,12 +1,10 @@
 package java.lang.contract;
 
-import java.lang.annotation.Pragma;
 import java.lang.annotation.Pure;
 import java.lang.uint256;
 
 // SPDX-License-Identifier: MIT
 
-@Pragma("0.8.18")
 public class MyToken extends ERC20  {
     /**
      * The total supply of the token.

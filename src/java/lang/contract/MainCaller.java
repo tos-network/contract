@@ -6,7 +6,6 @@ import java.lang.rlp.RlpList;
 import java.lang.rlp.RlpString;
 import java.lang.ABI;
 import java.crypto.Keccak256;
-
 // Entry point of the contract
 public final class MainCaller {
 
@@ -32,6 +31,8 @@ public final class MainCaller {
 
             // load contract
             if (!beforeCall(contract)) {
+                msg.setSuccess(false);
+                msg.setOutput("beforeCall failed".getBytes());
                 return;
             }
 
@@ -39,14 +40,19 @@ public final class MainCaller {
             Result<byte[]> result = executeCall(contract, input);
             if (result.isSuccess()) {
                 // after call
-                afterCall();
+                Result<Boolean> afterCallResult = afterCall();
+                if (!afterCallResult.isSuccess()) {
+                    msg.setSuccess(false);
+                    msg.setOutput("afterCall failed".getBytes());
+                    return;
+                }
                 // set output
                 msg.setSuccess(true);
                 msg.setOutput(result.value);
             }
         } catch (Exception e) {
             msg.setSuccess(false);
-            msg.setOutput(e.getMessage().getBytes());
+            msg.setOutput("executeCall failed".getBytes());
         }
     }
 
@@ -149,17 +155,36 @@ public final class MainCaller {
                 System.out.println(currentClass.getName()+"：" + method.getName());
                 System.out.println(method.getParameterTypes());
                 String methodSignature =buildMethodSignature(method.getParameterTypes(), method.getName());
-                System.out.println("methodSignature: " + methodSignature);
                 byte[] methodSelector = buildMethodId(methodSignature);
-                System.out.println("methodSelector: " + java.lang.types.Numeric.toHexString(methodSelector));
-                // Check if method has External annotation
+                // Skip methods that are:
+                // 1. static
+                // 2. non-public
+                // 3. synthetic (compiler-generated)
+                // 4. bridge methods
+                int modifiers = method.getModifiers();
+                if (java.lang.reflect.Modifier.isStatic(modifiers) || 
+                    !java.lang.reflect.Modifier.isPublic(modifiers) ||
+                    method.isSynthetic() ||
+                    method.isBridge()) {
+                    continue;
+                }
+                //Pure pureAnnotation = method.getAnnotation(Pure.class);
+                //boolean isPure = (pureAnnotation != null);
+                //System.out.println("Method " + method.getName() + " isPure: " + isPure);
                 if (java.util.Arrays.equals(selector, methodSelector)) {
                     // Convert parameters to appropriate types
                     Object[] args = convertParams(method.getParameterTypes(), params);
-                    
-                    // Ensure method is accessible
+                  
+                                // Ensure method is accessible
                     method.setAccessible(true);
-                    
+
+                    // Set security manager
+                    SecurityManager sm = new TSecurityManager();
+                    if (System.getSecurityManager() != null) {
+                        return Result.fail("SecurityManager not null"); 
+                    }
+                    System.setSecurityManager(sm);
+
                     // Invoke the method
                     Object result = method.invoke(contract, args);
                     
@@ -258,7 +283,8 @@ public final class MainCaller {
      * afterCall is called after the call is made.
      * @return no return.
      */
-    protected final static void afterCall() {
+    protected final static Result<Boolean> afterCall() {
+        return Result.ok(true);
     }
 
     /**
@@ -269,18 +295,9 @@ public final class MainCaller {
     private final static byte[] computeMethodSelector(String methodSignature) {
         // Convert string to UTF-8 byte array
         byte[] input = methodSignature.getBytes();
-        
-        System.out.println("input: "+ methodSignature);
-
-        // Convert to int8 array
-        //for (int i = 0; i < input.length; i++) {
-        //    input[i] = (byte)(input[i] & 0xFF);  // Ensure unsigned conversion
-        //}
-
         // Calculate keccak256 hash
         Keccak256 keccak256 = Keccak256.getKeccak256();
         byte[] hash = keccak256.sha3(input);
-        System.out.println("hash: " + java.lang.types.Numeric.toHexString(hash));
         // Take first 4 bytes as selector
         byte[] selector = new byte[4];
         System.arraycopy(hash, 0, selector, 0, 4);
